@@ -1,0 +1,66 @@
+{% block tinect_oauth_provider_open_id_connect_settings %}
+<div class="tinect-oauth-provider-open-id-connect-settings">
+    <sw-container
+        columns="repeat(auto-fit, minmax(250px, 1fr))"
+        gap="0px 30px"
+    >
+        <sw-text-field
+            v-model:value="item.config.clientId"
+            label="Client ID"
+            placeholder="OIDC Client ID"
+            required
+        ></sw-text-field>
+        <sw-password-field
+            v-model:value="item.config.clientSecret"
+            label="Client Secret"
+            placeholder="OIDC Client Secret"
+            required
+        ></sw-password-field>
+    </sw-container>
+    <sw-container
+        columns="1fr"
+        gap="0px 30px"
+    >
+        <sw-text-field
+            v-model:value="item.config.discoveryDocumentUrl"
+            label="Discovery Document URL"
+            placeholder="https://accounts.example.com/.well-known/openid-configuration"
+            help-text="If provided, the authorization, token and userinfo endpoints will be fetched automatically."
+        ></sw-text-field>
+    </sw-container>
+    <sw-container
+        columns="repeat(auto-fit, minmax(250px, 1fr))"
+        gap="0px 30px"
+    >
+        <sw-text-field
+            v-model:value="item.config.authorization_endpoint"
+            label="Authorization Endpoint"
+            placeholder="https://accounts.example.com/authorize"
+            help-text="Leave empty to use the discovery document."
+        ></sw-text-field>
+        <sw-text-field
+            v-model:value="item.config.token_endpoint"
+            label="Token Endpoint"
+            placeholder="https://accounts.example.com/token"
+            help-text="Leave empty to use the discovery document."
+        ></sw-text-field>
+        <sw-text-field
+            v-model:value="item.config.userinfo_endpoint"
+            label="Userinfo Endpoint"
+            placeholder="https://accounts.example.com/userinfo"
+            help-text="Leave empty to use the discovery document."
+        ></sw-text-field>
+    </sw-container>
+    <sw-container
+        columns="1fr"
+        gap="0px 30px"
+    >
+        <sw-text-field
+            v-model:value="item.config.scopes"
+            label="Scopes"
+            placeholder="openid email profile"
+            help-text="Space-separated list of scopes. Defaults to: openid email profile"
+        ></sw-text-field>
+    </sw-container>
+</div>
+{% endblock %}

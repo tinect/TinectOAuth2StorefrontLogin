@@ -1,0 +1,11 @@
+monolog:
+    channels:
+        - 'tinect-oauth2-storefront-login'
+    handlers:
+        tinect_oauth2_storefront_login:
+            type: rotating_file
+            path: '%kernel.logs_dir%/tinect_oauth2_storefront_login.log'
+            level: info
+            max_files: 14
+            channels:
+                - 'tinect-oauth2-storefront-login'

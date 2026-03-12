@@ -1,0 +1,33 @@
+{
+    "tinect-oauth": {
+        "login": {
+            "orLoginWith": "or continue with",
+            "loginWith": "Continue with %provider%"
+        },
+        "connect": {
+            "title": "Connected accounts",
+            "connect": "Connect with %provider%",
+            "disconnect": "Disconnect",
+            "statusConnected": "Connected",
+            "statusNotConnected": "Not connected",
+            "success": "Account connected successfully with %provider%."
+        },
+        "disconnect": {
+            "success": "Account disconnected successfully from %provider%."
+        },
+        "error": {
+            "clientNotFound": "This login provider is not available.",
+            "providerNotConfigured": "This login provider is not configured correctly. Please contact support.",
+            "invalidState": "Security validation failed. Please try logging in again.",
+            "providerError": "The login provider returned an error: %error%",
+            "missingCode": "OAuth login failed. No authorisation code was received.",
+            "loginFailed": "Login failed. Please try again or use email and password.",
+            "noAccountFound": "No account was found for this identity. Please log in with your credentials first and then connect your account from your profile.",
+            "accountAlreadyConnected": "This provider account is already linked to a different customer.",
+            "loginRequired": "Please log in before connecting an account.",
+            "connectFailed": "Could not connect the account. Please try again.",
+            "disconnectFailed": "Could not disconnect the account. Please try again.",
+            "emailMismatch": "The email address from the provider does not match your account email. If your email address has changed, please contact the shop owner."
+        }
+    }
+}

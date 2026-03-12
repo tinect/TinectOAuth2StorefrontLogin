@@ -1,0 +1,48 @@
+{
+    "name": "tinect/oauth2-storefront-login",
+    "description": "Adds OAuth2/OIDC login support to the Shopware 6 storefront (Microsoft, Google, GitHub, generic OIDC)",
+    "version": "1.0.0",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tinect",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tinect\\OAuth2StorefrontLogin\\": "src/"
+        }
+    },
+    "require": {
+        "shopware/core": "~6.6.0",
+        "shopware/storefront": "*"
+    },
+    "extra": {
+        "shopware-plugin-class": "Tinect\\OAuth2StorefrontLogin\\TinectOAuth2StorefrontLogin",
+        "label": {
+            "de-DE": "OAuth2/OIDC Storefront Login",
+            "en-GB": "OAuth2/OIDC Storefront Login"
+        },
+        "description": {
+            "de-DE": "OAuth2/OIDC-Login für Shopware 6 via GitHub, Microsoft Entra ID, Google oder beliebige OIDC-Provider. Unterstützt Kontenverknüpfung, E-Mail-Verifizierung und E-Mail-Aktualisierung.",
+            "en-GB": "OAuth2/OIDC login for Shopware 6 storefront via GitHub, Microsoft Entra ID, Google, or any OIDC provider. Supports account linking, email verification, and email updates on login."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://github.com/tinect",
+            "en-GB": "https://github.com/tinect"
+        },
+        "supportLink": {
+            "de-DE": "https://github.com/tinect/TinectOAuth2StorefrontLogin/issues",
+            "en-GB": "https://github.com/tinect/TinectOAuth2StorefrontLogin/issues"
+        }
+    },
+    "scripts": {
+        "check": [
+            "docker run --rm -v $(pwd):/ext shopware/shopware-cli:latest extension validate --check-against lowest --full /ext",
+            "docker run --rm -v $(pwd):/ext shopware/shopware-cli:latest extension validate --check-against highest --full /ext"
+        ],
+        "format": "docker run --rm -v $(pwd):/ext shopware/shopware-cli:latest extension format /ext"
+    }
+}

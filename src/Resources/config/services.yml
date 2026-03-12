@@ -1,0 +1,41 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            Symfony\Contracts\HttpClient\HttpClientInterface $httpClient: '@http_client'
+            Shopware\Core\Framework\DataAbstractionLayer\EntityRepository $clientsRepository: '@tinect_oauth_storefront_client.repository'
+            Shopware\Core\Checkout\Customer\SalesChannel\AbstractRegisterRoute $registerRoute: '@Shopware\Core\Checkout\Customer\SalesChannel\RegisterRoute'
+            Doctrine\DBAL\Connection $connection: '@Doctrine\DBAL\Connection'
+
+    _instanceof:
+        Tinect\OAuth2StorefrontLogin\Contract\ClientProviderContract:
+            tags:
+                - 'tinect.oauth_storefront.client_provider'
+        Symfony\Component\EventDispatcher\EventSubscriberInterface:
+            tags:
+                - 'kernel.event_subscriber'
+        Shopware\Storefront\Controller\StorefrontController:
+            public: true
+            calls:
+                - setContainer: ['@service_container']
+
+    Tinect\OAuth2StorefrontLogin\:
+        resource: '../../*'
+        exclude:
+            - '../../Database/*Collection.php'
+            - '../../Database/*Entity.php'
+            - '../../Migration/*'
+            - '../../Resources/*'
+
+    Tinect\OAuth2StorefrontLogin\Contract\ClientProviderRepositoryContract:
+        arguments:
+            - !tagged_iterator tinect.oauth_storefront.client_provider
+
+    Tinect\OAuth2StorefrontLogin\Database\OAuthClientEntity:
+        tags:
+            - name: shopware.entity
+
+    Tinect\OAuth2StorefrontLogin\Database\OAuthCustomerKeyEntity:
+        tags:
+            - name: shopware.entity

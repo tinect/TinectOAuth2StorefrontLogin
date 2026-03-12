@@ -1,0 +1,137 @@
+{% block tinect_oauth_storefront_client_edit_page %}
+<sw-page class="tinect-oauth-storefront-client-edit-page">
+    {% block tinect_oauth_storefront_client_edit_smart_bar_header %}
+    <template #smart-bar-header>
+        <h2>
+            <template v-if="isCreateMode">
+                {{ $tc('tinect-oauth-storefront-client.create.title') }}
+            </template>
+
+            <template v-else>
+                {{ $tc('tinect-oauth-storefront-client.edit.title') }}
+                -
+                {{ client?.name }}
+            </template>
+        </h2>
+    </template>
+    {% endblock %}
+
+    {% block tinect_oauth_storefront_client_edit_smart_bar_actions %}
+    <template #smart-bar-actions>
+        <sw-button
+            :disabled="isLoading"
+            @click="onBack"
+        >
+            {{ $tc('tinect-oauth-storefront-client.edit.buttonBack') }}
+        </sw-button>
+        <sw-button-process
+            v-if="!isCreateMode"
+            class="sw-settings-login-registration__save-action"
+            :is-loading="isLoading"
+            :process-success="isSaveSuccessful"
+            variant="primary"
+            @click="onSave"
+        >
+            {{ $tc('tinect-oauth-storefront-client.edit.buttonSave') }}
+        </sw-button-process>
+        <sw-button
+            v-else
+            variant="primary"
+            :is-loading="isLoading"
+            :disabled="!client || !client.name || !client.provider"
+            @click="onSave"
+        >
+            {{ $tc('tinect-oauth-storefront-client.create.buttonSave') }}
+        </sw-button>
+    </template>
+    {% endblock %}
+
+    {% block tinect_oauth_storefront_client_edit_content %}
+    <template #content>
+        <sw-card-view v-if="client">
+            {% block tinect_oauth_storefront_client_edit_card_base %}
+            <sw-card
+                :title="$tc('tinect-oauth-storefront-client.edit.cardTitleBase')"
+                :is-loading="isLoading"
+            >
+                <sw-container
+                    columns="repeat(auto-fit, minmax(250px, 1fr))"
+                    gap="0px 30px"
+                >
+                    <sw-text-field
+                        v-model:value="client.name"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelName')"
+                        :placeholder="$tc('tinect-oauth-storefront-client.edit.labelName')"
+                        required
+                    ></sw-text-field>
+                    <sw-single-select
+                        v-model:value="client.provider"
+                        :options="providerOptions"
+                        :label="$tc('tinect-oauth-storefront-client.create.labelProvider')"
+                        :placeholder="$tc('tinect-oauth-storefront-client.create.placeholderProvider')"
+                        required
+                    ></sw-single-select>
+                    <sw-switch-field
+                        v-model:value="client.active"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelActive')"
+                    ></sw-switch-field>
+                    <sw-switch-field
+                        v-model:value="client.connectOnly"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelConnectOnly')"
+                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelConnectOnlyHelp')"
+                    ></sw-switch-field>
+                    <sw-switch-field
+                        v-model:value="client.trustEmail"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelTrustEmail')"
+                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelTrustEmailHelp')"
+                    ></sw-switch-field>
+                    <sw-switch-field
+                        v-model:value="client.updateEmailOnLogin"
+                        :disabled="client.trustEmail"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLogin')"
+                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLoginHelp')"
+                    ></sw-switch-field>
+                </sw-container>
+            </sw-card>
+            {% endblock %}
+
+            {% block tinect_oauth_storefront_client_edit_card_provider %}
+            <sw-card
+                v-if="providerSettingsComponent"
+                :title="$tc('tinect-oauth-storefront-client.edit.cardTitleProviderSettings')"
+                :is-loading="isLoading"
+            >
+                <component
+                    :is="providerSettingsComponent"
+                    :item="client"
+                ></component>
+            </sw-card>
+            {% endblock %}
+
+            {% block tinect_oauth_storefront_client_edit_card_danger %}
+            <sw-card
+                v-if="!isCreateMode"
+                title="Danger Zone"
+            >
+                <sw-button
+                    variant="danger"
+                    @click="showDeleteModal = true"
+                    :is-loading="isLoading"
+                >
+                    {{ $tc('tinect-oauth-storefront-client.edit.buttonDelete') }}
+                </sw-button>
+                <sw-confirm-modal
+                    v-if="showDeleteModal"
+                    type="delete"
+                    :text="$tc('tinect-oauth-storefront-client.edit.deleteConfirmText')"
+                    @confirm="onDelete"
+                    @cancel="showDeleteModal = false"
+                    @close="showDeleteModal = false"
+                ></sw-confirm-modal>
+            </sw-card>
+            {% endblock %}
+        </sw-card-view>
+    </template>
+    {% endblock %}
+</sw-page>
+{% endblock %}

@@ -1,0 +1,50 @@
+{
+    "tinect-oauth-storefront-client": {
+        "title": "OAuth Storefront Login",
+        "list": {
+            "title": "OAuth Clients",
+            "buttonCreate": "OAuth Client erstellen",
+            "columnName": "Name",
+            "columnProvider": "Anbieter",
+            "columnActive": "Aktiv",
+            "emptyState": "Keine OAuth Clients gefunden"
+        },
+        "create": {
+            "title": "OAuth Client erstellen",
+            "labelName": "Name",
+            "labelProvider": "Anbieter",
+            "placeholderProvider": "Anbieter auswählen...",
+            "buttonSave": "Erstellen",
+            "buttonCancel": "Abbrechen"
+        },
+        "edit": {
+            "title": "OAuth Client bearbeiten",
+            "cardTitleBase": "Allgemeine Einstellungen",
+            "cardTitleProviderSettings": "Anbieter-Einstellungen",
+            "labelName": "Name",
+            "labelActive": "Aktiv",
+            "labelConnectOnly": "Nur verbinden (keine neuen Konten)",
+            "labelConnectOnlyHelp": "Wenn aktiviert, erstellt keine neuen Kundenkonten. Er kann nur verwendet werden, um ein bestehendes Konto zu verknüpfen.",
+            "labelTrustEmail": "E-Mail-Verifizierung bei Anmeldung erforderlich",
+            "labelTrustEmailHelp": "Wenn aktiviert, ist eine schlüsselbasierte Anmeldung nur erfolgreich, wenn die E-Mail-Adresse des Anbieters auch mit dem verknüpften Kundenkonto übereinstimmt. Dies verhindert den Zugriff, wenn ein OAuth-Schlüssel von einer anderen Person mit einer anderen E-Mail-Adresse verwendet wird.",
+            "labelUpdateEmailOnLogin": "E-Mail-Adresse bei jeder Anmeldung aktualisieren",
+            "labelUpdateEmailOnLoginHelp": "Wenn aktiviert, wird die E-Mail-Adresse des Kunden in Shopware bei jeder Anmeldung auf die vom Anbieter zurückgegebene E-Mail-Adresse aktualisiert. Nützlich, wenn der Anbieter (z. B. unternehmensweites SSO) die maßgebliche Quelle für E-Mail-Adressen ist.",
+            "buttonSave": "Speichern",
+            "buttonBack": "Zurück zur Liste",
+            "buttonDelete": "Löschen",
+            "deleteConfirmText": "Sind Sie sicher, dass Sie diesen OAuth-Client löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+        },
+        "provider": {
+            "github": "GitHub",
+            "open_id_connect": "OpenID Connect",
+            "microsoft_entra": "Microsoft Entra ID",
+            "google_mail": "Google Mail"
+        },
+        "notification": {
+            "saveSuccess": "OAuth Client erfolgreich gespeichert.",
+            "saveError": "Fehler beim Speichern des OAuth Clients.",
+            "deleteSuccess": "OAuth Client erfolgreich gelöscht.",
+            "deleteError": "Fehler beim Löschen des OAuth Clients."
+        }
+    }
+}

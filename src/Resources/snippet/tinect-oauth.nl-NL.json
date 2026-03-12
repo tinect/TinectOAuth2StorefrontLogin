@@ -1,0 +1,33 @@
+{
+    "tinect-oauth": {
+        "login": {
+            "orLoginWith": "of doorgaan met",
+            "loginWith": "Doorgaan met %provider%"
+        },
+        "connect": {
+            "title": "Gekoppelde accounts",
+            "connect": "Koppelen met %provider%",
+            "disconnect": "Ontkoppelen",
+            "statusConnected": "Gekoppeld",
+            "statusNotConnected": "Niet gekoppeld",
+            "success": "Account succesvol gekoppeld met %provider%."
+        },
+        "disconnect": {
+            "success": "Account succesvol ontkoppeld van %provider%."
+        },
+        "error": {
+            "clientNotFound": "Deze inlogprovider is niet beschikbaar.",
+            "providerNotConfigured": "Deze inlogprovider is niet correct geconfigureerd. Neem contact op met de klantenservice.",
+            "invalidState": "Beveiligingsvalidatie mislukt. Probeer opnieuw in te loggen.",
+            "providerError": "De inlogprovider heeft een fout geretourneerd: %error%",
+            "missingCode": "OAuth-aanmelding mislukt. Er is geen autorisatiecode ontvangen.",
+            "loginFailed": "Aanmelden mislukt. Probeer het opnieuw of gebruik uw e-mailadres en wachtwoord.",
+            "noAccountFound": "Er is geen account gevonden voor deze identiteit. Log eerst in met uw gegevens en koppel daarna uw account vanuit uw profiel.",
+            "accountAlreadyConnected": "Dit provideraccount is al gekoppeld aan een andere klant.",
+            "loginRequired": "Log in voordat u een account koppelt.",
+            "connectFailed": "Kan het account niet koppelen. Probeer het opnieuw.",
+            "disconnectFailed": "Kan het account niet ontkoppelen. Probeer het opnieuw.",
+            "emailMismatch": "Het e-mailadres van de provider komt niet overeen met uw account-e-mailadres. Als uw e-mailadres is gewijzigd, neem dan contact op met de winkeleigenaar."
+        }
+    }
+}

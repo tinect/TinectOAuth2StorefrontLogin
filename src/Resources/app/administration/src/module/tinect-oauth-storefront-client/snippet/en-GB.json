@@ -1,0 +1,50 @@
+{
+    "tinect-oauth-storefront-client": {
+        "title": "OAuth Storefront Login",
+        "list": {
+            "title": "OAuth Clients",
+            "buttonCreate": "Create OAuth Client",
+            "columnName": "Name",
+            "columnProvider": "Provider",
+            "columnActive": "Active",
+            "emptyState": "No OAuth clients found"
+        },
+        "create": {
+            "title": "Create OAuth Client",
+            "labelName": "Name",
+            "labelProvider": "Provider",
+            "placeholderProvider": "Select provider...",
+            "buttonSave": "Create",
+            "buttonCancel": "Cancel"
+        },
+        "edit": {
+            "title": "Edit OAuth Client",
+            "cardTitleBase": "General Settings",
+            "cardTitleProviderSettings": "Provider Settings",
+            "labelName": "Name",
+            "labelActive": "Active",
+            "labelConnectOnly": "Connect only (no new accounts)",
+            "labelConnectOnlyHelp": "If enabled, this provider will not create new customer accounts. It can only be used to connect an existing account.",
+            "labelTrustEmail": "Require email verification on login",
+            "labelTrustEmailHelp": "If enabled, a key-based login only succeeds when the provider's email also matches the linked customer account. This prevents access if the OAuth key is reused by a different person with a different email address.",
+            "labelUpdateEmailOnLogin": "Update email address on every login",
+            "labelUpdateEmailOnLoginHelp": "If enabled, the customer's email address in Shopware is updated to match the email returned by the provider on each login. Useful when the provider (e.g. corporate SSO) is the authoritative source for email addresses.",
+            "buttonSave": "Save",
+            "buttonBack": "Back to list",
+            "buttonDelete": "Delete",
+            "deleteConfirmText": "Are you sure you want to delete this OAuth client? This action cannot be undone."
+        },
+        "provider": {
+            "github": "GitHub",
+            "open_id_connect": "OpenID Connect",
+            "microsoft_entra": "Microsoft Entra ID",
+            "google_mail": "Google Mail"
+        },
+        "notification": {
+            "saveSuccess": "OAuth Client saved successfully.",
+            "saveError": "Error saving OAuth Client.",
+            "deleteSuccess": "OAuth Client deleted successfully.",
+            "deleteError": "Error deleting OAuth Client."
+        }
+    }
+}

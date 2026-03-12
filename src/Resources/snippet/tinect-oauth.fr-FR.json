@@ -1,0 +1,33 @@
+{
+    "tinect-oauth": {
+        "login": {
+            "orLoginWith": "ou continuer avec",
+            "loginWith": "Continuer avec %provider%"
+        },
+        "connect": {
+            "title": "Comptes connectés",
+            "connect": "Connecter avec %provider%",
+            "disconnect": "Déconnecter",
+            "statusConnected": "Connecté",
+            "statusNotConnected": "Non connecté",
+            "success": "Compte connecté avec succès à %provider%."
+        },
+        "disconnect": {
+            "success": "Compte déconnecté avec succès de %provider%."
+        },
+        "error": {
+            "clientNotFound": "Ce fournisseur de connexion n'est pas disponible.",
+            "providerNotConfigured": "Ce fournisseur de connexion n'est pas configuré correctement. Veuillez contacter le support.",
+            "invalidState": "La validation de sécurité a échoué. Veuillez réessayer de vous connecter.",
+            "providerError": "Le fournisseur de connexion a renvoyé une erreur : %error%",
+            "missingCode": "La connexion OAuth a échoué. Aucun code d'autorisation n'a été reçu.",
+            "loginFailed": "La connexion a échoué. Veuillez réessayer ou utiliser votre adresse e-mail et votre mot de passe.",
+            "noAccountFound": "Aucun compte n'a été trouvé pour cette identité. Veuillez d'abord vous connecter avec vos identifiants, puis associer votre compte depuis votre profil.",
+            "accountAlreadyConnected": "Ce compte fournisseur est déjà lié à un autre client.",
+            "loginRequired": "Veuillez vous connecter avant d'associer un compte.",
+            "connectFailed": "Impossible de connecter le compte. Veuillez réessayer.",
+            "disconnectFailed": "Impossible de déconnecter le compte. Veuillez réessayer.",
+            "emailMismatch": "L'adresse e-mail du fournisseur ne correspond pas à l'e-mail de votre compte. Si votre adresse e-mail a changé, veuillez contacter le responsable de la boutique."
+        }
+    }
+}

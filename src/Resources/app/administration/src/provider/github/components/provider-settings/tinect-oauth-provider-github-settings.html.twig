@@ -1,0 +1,34 @@
+{% block tinect_oauth_provider_github_settings %}
+<div class="tinect-oauth-provider-github-settings">
+    <sw-container
+        columns="repeat(auto-fit, minmax(250px, 1fr))"
+        gap="0px 30px"
+    >
+        <sw-text-field
+            v-model:value="item.config.clientId"
+            label="Client ID"
+            placeholder="GitHub OAuth App Client ID"
+            required
+        ></sw-text-field>
+        <sw-password-field
+            v-model:value="item.config.clientSecret"
+            label="Client Secret"
+            placeholder="GitHub OAuth App Client Secret"
+            required
+        ></sw-password-field>
+    </sw-container>
+    <sw-container
+        columns="1fr"
+        gap="0px 30px"
+        style="margin-top: 16px;"
+    >
+        <sw-text-field-deprecated
+            :value="callbackUrl"
+            label="Authorization callback URL"
+            :disabled="true"
+            :copyable="true"
+            :copyable-tooltip="true"
+        ></sw-text-field-deprecated>
+    </sw-container>
+</div>
+{% endblock %}

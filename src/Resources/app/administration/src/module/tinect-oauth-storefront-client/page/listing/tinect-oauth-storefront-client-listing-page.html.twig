@@ -1,0 +1,62 @@
+{% block tinect_oauth_storefront_client_listing_page %}
+<sw-page class="tinect-oauth-storefront-client-listing-page">
+    {% block tinect_oauth_storefront_client_listing_smart_bar_header %}
+    <template #smart-bar-header>
+        <h2>
+            {{ $tc('tinect-oauth-storefront-client.list.title') }}
+        </h2>
+    </template>
+    {% endblock %}
+
+    {% block tinect_oauth_storefront_client_listing_smart_bar_actions %}
+    <template #smart-bar-actions>
+        <sw-button
+            variant="primary"
+            @click="onCreateNew"
+        >
+            {{ $tc('tinect-oauth-storefront-client.list.buttonCreate') }}
+        </sw-button>
+    </template>
+    {% endblock %}
+
+    {% block tinect_oauth_storefront_client_listing_content %}
+    <template #content>
+        <sw-entity-listing
+            v-if="clients"
+            ref="swEntityListing"
+            :items="clients"
+            :columns="columns"
+            :repository="repository"
+            :is-loading="isLoading"
+            :allow-inline-edit="false"
+            detail-route="tinect.oauth.storefront.client.edit"
+        >
+            {% block tinect_oauth_storefront_client_listing_column_active %}
+            <template #column-active="{ item }">
+                <sw-icon
+                    v-if="item.active"
+                    name="regular-checkmark-circle"
+                    color="#37D046"
+                ></sw-icon>
+                <sw-icon
+                    v-else
+                    name="regular-times-circle"
+                    color="#DE294C"
+                ></sw-icon>
+            </template>
+            {% endblock %}
+
+            {% block tinect_oauth_storefront_client_listing_column_provider %}
+            <template #column-provider="{ item }">
+                {{ $tc('tinect-oauth-storefront-client.provider.' + item.provider) }}
+            </template>
+            {% endblock %}
+        </sw-entity-listing>
+        <sw-empty-state
+            v-else-if="!isLoading"
+            :title="$tc('tinect-oauth-storefront-client.list.emptyState')"
+        ></sw-empty-state>
+    </template>
+    {% endblock %}
+</sw-page>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% sw_extends '@Storefront/storefront/component/account/login.html.twig' %}
+
+{% block component_account_login_submit %}
+    {{ parent() }}
+
+    {% set oauthClients = tinect_oauth_clients(context.context) %}
+
+    {% if oauthClients|length > 0 %}
+        <div class="tinect-oauth-divider my-3">
+            <div class="tinect-oauth-divider-inner">
+                <span class="tinect-oauth-divider-text">{{ 'tinect-oauth.login.orLoginWith'|trans|sw_sanitize }}</span>
+            </div>
+        </div>
+
+        <div class="tinect-oauth-providers d-grid gap-2">
+            {% for client in oauthClients %}
+                <a href="{{ path('widgets.tinect.oauth.redirect', { clientId: client.id, redirectTo, redirectParameters  }) }}"
+                   class="btn btn-outline-secondary tinect-oauth-btn tinect-oauth-btn--{{ client.provider|escape('html_attr') }}">
+                    {{ 'tinect-oauth.login.loginWith'|trans({ '%provider%': client.name })|sw_sanitize }}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

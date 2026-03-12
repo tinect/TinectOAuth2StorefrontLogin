@@ -1,0 +1,33 @@
+{
+    "tinect-oauth": {
+        "login": {
+            "orLoginWith": "oder weiter mit",
+            "loginWith": "Weiter mit %provider%"
+        },
+        "connect": {
+            "title": "Verbundene Konten",
+            "connect": "Mit %provider% verbinden",
+            "disconnect": "Verbindung trennen",
+            "statusConnected": "Verbunden",
+            "statusNotConnected": "Nicht verbunden",
+            "success": "Konto erfolgreich mit %provider% verbunden."
+        },
+        "disconnect": {
+            "success": "Verbindung mit %provider% erfolgreich getrennt."
+        },
+        "error": {
+            "clientNotFound": "Dieser Login-Anbieter ist nicht verfügbar.",
+            "providerNotConfigured": "Dieser Login-Anbieter ist nicht korrekt konfiguriert. Bitte den Support kontaktieren.",
+            "invalidState": "Sicherheitsvalidierung fehlgeschlagen. Bitte erneut anmelden.",
+            "providerError": "Der Login-Anbieter hat einen Fehler zurückgegeben: %error%",
+            "missingCode": "OAuth-Anmeldung fehlgeschlagen. Kein Autorisierungscode erhalten.",
+            "loginFailed": "Anmeldung fehlgeschlagen. Bitte erneut versuchen oder E-Mail und Passwort verwenden.",
+            "noAccountFound": "Für diese Identität wurde kein Konto gefunden. Bitte zuerst mit den Zugangsdaten anmelden und das Konto dann im Profil verknüpfen.",
+            "accountAlreadyConnected": "Dieses Anbieter-Konto ist bereits mit einem anderen Kundenkonto verknüpft.",
+            "loginRequired": "Bitte zuerst anmelden, bevor ein Konto verknüpft wird.",
+            "connectFailed": "Das Konto konnte nicht verknüpft werden. Bitte erneut versuchen.",
+            "disconnectFailed": "Die Verbindung konnte nicht getrennt werden. Bitte erneut versuchen.",
+            "emailMismatch": "Die E-Mail-Adresse des Anbieters stimmt nicht mit der Konto-E-Mail überein. Falls sich Ihre E-Mail-Adresse geändert hat, wenden Sie sich bitte an den Shop-Betreiber."
+        }
+    }
+}
