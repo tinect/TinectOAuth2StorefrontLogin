@@ -4,6 +4,7 @@
         "list": {
             "title": "OAuth Clients",
             "buttonCreate": "OAuth Client erstellen",
+            "buttonConnections": "Verbindungen anzeigen",
             "columnName": "Name",
             "columnProvider": "Anbieter",
             "columnActive": "Aktiv",
@@ -29,6 +30,8 @@
             "labelTrustEmailHelp": "Wenn aktiviert, ist eine schlüsselbasierte Anmeldung nur erfolgreich, wenn die E-Mail-Adresse des Anbieters auch mit dem verknüpften Kundenkonto übereinstimmt. Dies verhindert den Zugriff, wenn ein OAuth-Schlüssel von einer anderen Person mit einer anderen E-Mail-Adresse verwendet wird. Außerdem nützlich, wenn der Shop-Betreiber die Kontrolle über die verwendeten E-Mail-Adressen behalten möchte und sicherstellen will, dass Kunden die E-Mail-Richtlinien nicht durch OAuth-Login umgehen können.",
             "labelUpdateEmailOnLogin": "E-Mail-Adresse bei jeder Anmeldung aktualisieren",
             "labelUpdateEmailOnLoginHelp": "Wenn aktiviert, wird die E-Mail-Adresse des Kunden in Shopware bei jeder Anmeldung auf die vom Anbieter zurückgegebene E-Mail-Adresse aktualisiert. Nützlich, wenn der Anbieter (z. B. unternehmensweites SSO) die maßgebliche Quelle für E-Mail-Adressen ist.",
+            "labelDisablePasswordLogin": "Passwort-Anmeldung deaktivieren",
+            "labelDisablePasswordLoginHelp": "Wenn aktiviert, können Kunden, die ihr Konto mit diesem Anbieter verknüpft haben, sich nicht mehr per E-Mail-Adresse und Passwort anmelden. Sie müssen diesen OAuth-Anbieter zur Anmeldung verwenden.",
             "buttonSave": "Speichern",
             "buttonBack": "Zurück zur Liste",
             "buttonDelete": "Löschen",
@@ -39,6 +42,33 @@
             "open_id_connect": "OpenID Connect",
             "microsoft_entra": "Microsoft Entra ID",
             "google_mail": "Google Mail"
+        },
+        "connections": {
+            "settingsLabel": "OAuth-Verbindungen",
+            "title": "OAuth-Verbindungen",
+            "buttonBack": "Zurück zu den Clients",
+            "buttonRefresh": "Aktualisieren",
+            "columnCustomerNumber": "Kundennr.",
+            "columnCustomer": "Kunde",
+            "columnClient": "Anbietername",
+            "columnProvider": "Anbietertyp",
+            "columnConnectedSince": "Verknüpft seit",
+            "actionDisconnect": "Verbindung trennen",
+            "emptyState": "Keine OAuth-Verbindungen gefunden",
+            "deleteConfirmText": "Soll diese OAuth-Verbindung wirklich getrennt werden?",
+            "deleteSuccess": "Verbindung erfolgreich getrennt.",
+            "deleteError": "Fehler beim Trennen der Verbindung."
+        },
+        "customerDetail": {
+            "cardTitle": "Verknüpfte OAuth-Anbieter",
+            "columnName": "Anbietername",
+            "columnProvider": "Anbietertyp",
+            "columnConnectedSince": "Verknüpft seit",
+            "actionDisconnect": "Verbindung trennen",
+            "emptyState": "Keine OAuth-Anbieter verknüpft",
+            "disconnectConfirmText": "Soll dieser OAuth-Anbieter wirklich vom Kundenkonto getrennt werden?",
+            "disconnectSuccess": "OAuth-Anbieter erfolgreich getrennt.",
+            "disconnectError": "Fehler beim Trennen des OAuth-Anbieters."
         },
         "notification": {
             "saveSuccess": "OAuth Client erfolgreich gespeichert.",

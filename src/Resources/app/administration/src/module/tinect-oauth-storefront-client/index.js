@@ -1,5 +1,6 @@
 import './page/listing';
 import './page/edit';
+import './page/connections';
 
 const { Module } = Shopware;
 
@@ -28,6 +29,10 @@ Module.register('tinect-oauth-storefront-client', {
                     return { clientId: route.params.id };
                 },
             },
+        },
+        connections: {
+            component: 'tinect-oauth-storefront-connections-page',
+            path: 'connections',
         },
     },
 

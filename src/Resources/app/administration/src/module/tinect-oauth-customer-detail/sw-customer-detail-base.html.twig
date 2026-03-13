@@ -1,0 +1,7 @@
+{% block sw_customer_detail_base_info_holder %}
+{% parent %}
+<tinect-oauth-customer-connected-providers
+    v-if="customer && customer.id"
+    :customer-id="customer.id"
+></tinect-oauth-customer-connected-providers>
+{% endblock %}

@@ -4,6 +4,7 @@
         "list": {
             "title": "OAuth Clients",
             "buttonCreate": "Create OAuth Client",
+            "buttonConnections": "View Connections",
             "columnName": "Name",
             "columnProvider": "Provider",
             "columnActive": "Active",
@@ -29,6 +30,8 @@
             "labelTrustEmailHelp": "If enabled, a key-based login only succeeds when the provider's email also matches the linked customer account. This prevents access if the OAuth key is reused by a different person with a different email address. Also useful when the shop owner needs to retain control over which email addresses are used, ensuring customers cannot bypass email policies through OAuth login.",
             "labelUpdateEmailOnLogin": "Update email address on every login",
             "labelUpdateEmailOnLoginHelp": "If enabled, the customer's email address in Shopware is updated to match the email returned by the provider on each login. Useful when the provider (e.g. corporate SSO) is the authoritative source for email addresses.",
+            "labelDisablePasswordLogin": "Disable password login",
+            "labelDisablePasswordLoginHelp": "If enabled, customers who have linked their account with this provider will no longer be able to log in using their email address and password. They must use this OAuth provider to sign in.",
             "buttonSave": "Save",
             "buttonBack": "Back to list",
             "buttonDelete": "Delete",
@@ -39,6 +42,33 @@
             "open_id_connect": "OpenID Connect",
             "microsoft_entra": "Microsoft Entra ID",
             "google_mail": "Google Mail"
+        },
+        "connections": {
+            "settingsLabel": "OAuth Connections",
+            "title": "OAuth Connections",
+            "buttonBack": "Back to clients",
+            "buttonRefresh": "Refresh",
+            "columnCustomerNumber": "Customer No.",
+            "columnCustomer": "Customer",
+            "columnClient": "Provider Name",
+            "columnProvider": "Provider Type",
+            "columnConnectedSince": "Connected Since",
+            "actionDisconnect": "Disconnect",
+            "emptyState": "No OAuth connections found",
+            "deleteConfirmText": "Are you sure you want to disconnect this OAuth provider from the customer account?",
+            "deleteSuccess": "Connection removed successfully.",
+            "deleteError": "Error removing the connection."
+        },
+        "customerDetail": {
+            "cardTitle": "Connected OAuth Providers",
+            "columnName": "Provider Name",
+            "columnProvider": "Provider Type",
+            "columnConnectedSince": "Connected Since",
+            "actionDisconnect": "Disconnect",
+            "emptyState": "No OAuth providers connected",
+            "disconnectConfirmText": "Are you sure you want to disconnect this OAuth provider from the customer account?",
+            "disconnectSuccess": "OAuth provider disconnected successfully.",
+            "disconnectError": "Error disconnecting the OAuth provider."
         },
         "notification": {
             "saveSuccess": "OAuth Client saved successfully.",

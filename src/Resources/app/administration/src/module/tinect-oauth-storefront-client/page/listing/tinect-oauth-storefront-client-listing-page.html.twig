@@ -10,6 +10,9 @@
 
     {% block tinect_oauth_storefront_client_listing_smart_bar_actions %}
     <template #smart-bar-actions>
+        <sw-button @click="onShowConnections">
+            {{ $tc('tinect-oauth-storefront-client.list.buttonConnections') }}
+        </sw-button>
         <sw-button
             variant="primary"
             @click="onCreateNew"

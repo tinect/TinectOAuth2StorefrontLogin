@@ -22,6 +22,7 @@
             "providerError": "Der Login-Anbieter hat einen Fehler zurückgegeben: %error%",
             "missingCode": "OAuth-Anmeldung fehlgeschlagen. Kein Autorisierungscode erhalten.",
             "loginFailed": "Die Anmeldung ist leider fehlgeschlagen. Bitte versuche es erneut oder nutze eine andere Anmeldemethode. Falls das Problem weiterhin besteht, wende dich gerne an unseren Support.",
+            "passwordLoginDisabled": "Die Anmeldung per Passwort ist für dein Konto nicht möglich. Bitte melde dich über deinen verknüpften Anbieter an.",
             "noAccountFound": "Für diese Identität wurde kein Konto gefunden. Bitte zuerst mit den Zugangsdaten anmelden und das Konto dann im Profil verknüpfen.",
             "accountAlreadyConnected": "Dieses Anbieter-Konto ist bereits mit einem anderen Kundenkonto verknüpft.",
             "loginRequired": "Bitte zuerst anmelden, bevor ein Konto verknüpft wird.",

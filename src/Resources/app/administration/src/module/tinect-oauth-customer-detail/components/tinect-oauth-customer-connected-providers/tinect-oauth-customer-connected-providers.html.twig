@@ -1,0 +1,45 @@
+<sw-card
+    :title="$tc('tinect-oauth-storefront-client.customerDetail.cardTitle')"
+    :is-loading="isLoading"
+>
+    <sw-data-grid
+        v-if="connectedProviders && connectedProviders.length > 0"
+        :data-source="connectedProviders"
+        :columns="columns"
+        :show-settings="false"
+        :show-selection="false"
+        :allow-inline-edit="false"
+    >
+        <template #column-client.provider="{ item }">
+            {{ providerLabel(item.client && item.client.provider) }}
+        </template>
+
+        <template #column-createdAt="{ item }">
+            {{ dateFilter(item.createdAt, { hour: '2-digit', minute: '2-digit' }) }}
+        </template>
+
+        <template #actions="{ item }">
+            <sw-context-menu-item
+                variant="danger"
+                @click="onDisconnect(item.id)"
+            >
+                {{ $tc('tinect-oauth-storefront-client.customerDetail.actionDisconnect') }}
+            </sw-context-menu-item>
+        </template>
+    </sw-data-grid>
+
+    <sw-empty-state
+        v-else-if="!isLoading"
+        :title="$tc('tinect-oauth-storefront-client.customerDetail.emptyState')"
+        :show-description="false"
+    ></sw-empty-state>
+
+    <sw-confirm-modal
+        v-if="showDeleteModal"
+        type="delete"
+        :text="$tc('tinect-oauth-storefront-client.customerDetail.disconnectConfirmText')"
+        @confirm="onConfirmDisconnect"
+        @cancel="onCancelDisconnect"
+        @close="onCancelDisconnect"
+    ></sw-confirm-modal>
+</sw-card>

@@ -1,0 +1,70 @@
+{% block tinect_oauth_storefront_connections_page %}
+<sw-page class="tinect-oauth-storefront-connections-page">
+    <template #smart-bar-header>
+        <h2>{{ $tc('tinect-oauth-storefront-client.connections.title') }}</h2>
+    </template>
+
+    <template #smart-bar-actions>
+        <sw-button @click="onBack">
+            {{ $tc('tinect-oauth-storefront-client.connections.buttonBack') }}
+        </sw-button>
+        <sw-button @click="getList">
+            {{ $tc('tinect-oauth-storefront-client.connections.buttonRefresh') }}
+        </sw-button>
+    </template>
+
+    <template #content>
+        <sw-data-grid
+            v-if="connections && connections.length > 0"
+            :data-source="connections"
+            :columns="columns"
+            :is-loading="isLoading"
+            :show-settings="false"
+            :show-selection="false"
+            :allow-inline-edit="false"
+            :sort-by="sortBy"
+            :sort-direction="sortDirection"
+        >
+            <template #column-customer.customerNumber="{ item }">
+                {{ item.customer && item.customer.customerNumber }}
+            </template>
+
+            <template #column-customer.email="{ item }">
+                {{ customerLabel(item.customer) }}
+            </template>
+
+            <template #column-client.provider="{ item }">
+                {{ providerLabel(item.client && item.client.provider) }}
+            </template>
+
+            <template #column-createdAt="{ item }">
+                {{ dateFilter(item.createdAt, { hour: '2-digit', minute: '2-digit' }) }}
+            </template>
+
+            <template #actions="{ item }">
+                <sw-context-menu-item
+                    variant="danger"
+                    @click="onDeleteConnection(item.id)"
+                >
+                    {{ $tc('tinect-oauth-storefront-client.connections.actionDisconnect') }}
+                </sw-context-menu-item>
+            </template>
+        </sw-data-grid>
+
+        <sw-empty-state
+            v-else-if="!isLoading"
+            :title="$tc('tinect-oauth-storefront-client.connections.emptyState')"
+            :show-description="false"
+        ></sw-empty-state>
+
+        <sw-confirm-modal
+            v-if="showDeleteModal"
+            type="delete"
+            :text="$tc('tinect-oauth-storefront-client.connections.deleteConfirmText')"
+            @confirm="onConfirmDelete"
+            @cancel="onCancelDelete"
+            @close="onCancelDelete"
+        ></sw-confirm-modal>
+    </template>
+</sw-page>
+{% endblock %}

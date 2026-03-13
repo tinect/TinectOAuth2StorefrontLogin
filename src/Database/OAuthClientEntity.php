@@ -35,6 +35,9 @@ class OAuthClientEntity extends BaseEntity
     #[Field(type: FieldType::BOOL)]
     public bool $updateEmailOnLogin = false;
 
+    #[Field(type: FieldType::BOOL)]
+    public bool $disablePasswordLogin = false;
+
     #[Field(type: FieldType::JSON)]
     public ?array $config = null;
 

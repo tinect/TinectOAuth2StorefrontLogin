@@ -22,6 +22,7 @@
             "providerError": "The login provider returned an error: %error%",
             "missingCode": "OAuth login failed. No authorisation code was received.",
             "loginFailed": "Login failed. Please try again or use a different login method. If the problem persists, feel free to contact our support team.",
+            "passwordLoginDisabled": "Password login is not available for your account. Please use your connected login provider to sign in.",
             "noAccountFound": "No account was found for this identity. Please log in with your credentials first and then connect your account from your profile.",
             "accountAlreadyConnected": "This provider account is already linked to a different customer.",
             "loginRequired": "Please log in before connecting an account.",

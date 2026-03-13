@@ -91,6 +91,11 @@
                         :label="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLogin')"
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLoginHelp')"
                     ></sw-switch-field>
+                    <sw-switch-field
+                        v-model:value="client.disablePasswordLogin"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLogin')"
+                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLoginHelp')"
+                    ></sw-switch-field>
                 </sw-container>
             </sw-card>
             {% endblock %}

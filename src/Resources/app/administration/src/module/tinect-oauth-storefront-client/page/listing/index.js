@@ -88,5 +88,11 @@ Component.register('tinect-oauth-storefront-client-listing-page', {
                 name: 'tinect.oauth.storefront.client.create',
             });
         },
+
+        onShowConnections() {
+            this.$router.push({
+                name: 'tinect.oauth.storefront.client.connections',
+            });
+        },
     },
 });
