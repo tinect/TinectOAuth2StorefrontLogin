@@ -1,3 +1,4 @@
+import './acl';
 import './page/listing';
 import './page/edit';
 import './page/connections';
@@ -16,14 +17,23 @@ Module.register('tinect-oauth-storefront-client', {
         list: {
             component: 'tinect-oauth-storefront-client-listing-page',
             path: 'list',
+            meta: {
+                privilege: 'tinect_oauth_storefront_client.viewer',
+            },
         },
         create: {
             component: 'tinect-oauth-storefront-client-edit-page',
             path: 'create',
+            meta: {
+                privilege: 'tinect_oauth_storefront_client.creator',
+            },
         },
         edit: {
             component: 'tinect-oauth-storefront-client-edit-page',
             path: 'edit/:id',
+            meta: {
+                privilege: 'tinect_oauth_storefront_client.editor',
+            },
             props: {
                 default(route) {
                     return { clientId: route.params.id };
@@ -33,6 +43,9 @@ Module.register('tinect-oauth-storefront-client', {
         connections: {
             component: 'tinect-oauth-storefront-connections-page',
             path: 'connections',
+            meta: {
+                privilege: 'tinect_oauth_storefront_client.viewer',
+            },
         },
     },
 
@@ -43,6 +56,7 @@ Module.register('tinect-oauth-storefront-client', {
             label: 'tinect-oauth-storefront-client.title',
             group: 'plugins',
             icon: 'regular-plug',
+            privilege: 'tinect_oauth_storefront_client.viewer',
         },
     ],
 });

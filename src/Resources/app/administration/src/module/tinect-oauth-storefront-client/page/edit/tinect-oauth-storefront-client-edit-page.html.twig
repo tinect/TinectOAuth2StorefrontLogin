@@ -25,7 +25,7 @@
             {{ $tc('tinect-oauth-storefront-client.edit.buttonBack') }}
         </sw-button>
         <sw-button-process
-            v-if="!isCreateMode"
+            v-if="!isCreateMode && acl.can('tinect_oauth_storefront_client.editor')"
             class="sw-settings-login-registration__save-action"
             :is-loading="isLoading"
             :process-success="isSaveSuccessful"
@@ -35,7 +35,7 @@
             {{ $tc('tinect-oauth-storefront-client.edit.buttonSave') }}
         </sw-button-process>
         <sw-button
-            v-else
+            v-else-if="isCreateMode && acl.can('tinect_oauth_storefront_client.creator')"
             variant="primary"
             :is-loading="isLoading"
             :disabled="!client || !client.name || !client.provider"
@@ -62,6 +62,7 @@
                         v-model:value="client.name"
                         :label="$tc('tinect-oauth-storefront-client.edit.labelName')"
                         :placeholder="$tc('tinect-oauth-storefront-client.edit.labelName')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                         required
                     ></sw-text-field>
                     <sw-single-select
@@ -69,25 +70,29 @@
                         :options="providerOptions"
                         :label="$tc('tinect-oauth-storefront-client.create.labelProvider')"
                         :placeholder="$tc('tinect-oauth-storefront-client.create.placeholderProvider')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                         required
                     ></sw-single-select>
                     <sw-switch-field
                         v-model:value="client.active"
                         :label="$tc('tinect-oauth-storefront-client.edit.labelActive')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                     ></sw-switch-field>
                     <sw-switch-field
                         v-model:value="client.connectOnly"
                         :label="$tc('tinect-oauth-storefront-client.edit.labelConnectOnly')"
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelConnectOnlyHelp')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                     ></sw-switch-field>
                     <sw-switch-field
                         v-model:value="client.trustEmail"
                         :label="$tc('tinect-oauth-storefront-client.edit.labelTrustEmail')"
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelTrustEmailHelp')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                     ></sw-switch-field>
                     <sw-switch-field
                         v-model:value="client.updateEmailOnLogin"
-                        :disabled="client.trustEmail"
+                        :disabled="client.trustEmail || !acl.can('tinect_oauth_storefront_client.editor')"
                         :label="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLogin')"
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLoginHelp')"
                     ></sw-switch-field>
@@ -95,6 +100,7 @@
                         v-model:value="client.disablePasswordLogin"
                         :label="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLogin')"
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLoginHelp')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                     ></sw-switch-field>
                 </sw-container>
             </sw-card>
@@ -115,7 +121,7 @@
 
             {% block tinect_oauth_storefront_client_edit_card_danger %}
             <sw-card
-                v-if="!isCreateMode"
+                v-if="!isCreateMode && acl.can('tinect_oauth_storefront_client.deleter')"
                 title="Danger Zone"
             >
                 <sw-button

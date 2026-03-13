@@ -6,7 +6,7 @@ const { Criteria } = Shopware.Data;
 Component.register('tinect-oauth-customer-connected-providers', {
     template,
 
-    inject: ['repositoryFactory'],
+    inject: ['acl', 'repositoryFactory'],
 
     mixins: [Mixin.getByName('notification')],
 

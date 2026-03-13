@@ -5,7 +5,7 @@ const { Component, Mixin } = Shopware;
 Component.register('tinect-oauth-storefront-client-edit-page', {
     template,
 
-    inject: ['repositoryFactory'],
+    inject: ['acl', 'repositoryFactory'],
 
     mixins: [Mixin.getByName('notification')],
 

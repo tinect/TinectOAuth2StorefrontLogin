@@ -14,6 +14,7 @@
             {{ $tc('tinect-oauth-storefront-client.list.buttonConnections') }}
         </sw-button>
         <sw-button
+            v-if="acl.can('tinect_oauth_storefront_client.creator')"
             variant="primary"
             @click="onCreateNew"
         >

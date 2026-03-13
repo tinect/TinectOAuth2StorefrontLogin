@@ -20,6 +20,7 @@
 
         <template #actions="{ item }">
             <sw-context-menu-item
+                v-if="acl.can('tinect_oauth_storefront_client.editor')"
                 variant="danger"
                 @click="onDisconnect(item.id)"
             >

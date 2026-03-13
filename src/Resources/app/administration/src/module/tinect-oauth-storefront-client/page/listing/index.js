@@ -6,7 +6,7 @@ const { Criteria } = Shopware.Data;
 Component.register('tinect-oauth-storefront-client-listing-page', {
     template,
 
-    inject: ['repositoryFactory'],
+    inject: ['acl', 'repositoryFactory'],
 
     mixins: [Mixin.getByName('listing')],
 
