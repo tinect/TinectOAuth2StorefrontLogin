@@ -15,6 +15,11 @@
             "Tinect\\OAuth2StorefrontLogin\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tinect\\OAuth2StorefrontLogin\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "shopware/core": "~6.6.0",
         "shopware/storefront": "*"
