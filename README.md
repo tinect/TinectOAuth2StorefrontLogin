@@ -30,6 +30,7 @@ Create one entry per provider you want to offer:
 | **Connect only** | When enabled the provider does not appear on the login page and will not create new customer accounts — it can only be used to link an existing account from the profile page |
 | **Require email verification on login** | When enabled, a key-based login only succeeds if the email address returned by the provider also matches the linked customer account. Useful for providers that always supply a verified email (e.g. Google, Microsoft), and also when the shop owner needs to retain control over which email addresses are used, ensuring customers cannot bypass email policies through OAuth login. |
 | **Update email address on every login** | When enabled, the customer's email address in Shopware is updated to match the provider's email on each login. Useful when the provider (e.g. corporate SSO) is the authoritative source for email addresses. |
+| **Disable password login** | When enabled, customers who have a connected account with this provider can no longer log in using their email and password — they must use this OAuth provider instead. |
 
 ### GitHub
 
@@ -68,6 +69,18 @@ Customer → "Continue with GitHub" button
 2. Active customer with matching e-mail → link and login
 3. No match + registration allowed → register new customer, link, login
 4. No match + `connectOnly` enabled → error, redirect to login page
+
+## Administration
+
+### OAuth Clients
+
+Manage providers under **Settings → Plugins → OAuth Storefront Login**.
+
+The **View Connections** button opens a dedicated list of all active customer–provider connections across the shop, showing customer number, name, email, provider name, provider type, and the date the connection was established. Connections can be removed directly from this list.
+
+### Customer detail
+
+Each customer's detail page shows a **Connected OAuth Providers** card listing all providers linked to that account. Connections can also be removed from there.
 
 ## Account connect / disconnect
 
