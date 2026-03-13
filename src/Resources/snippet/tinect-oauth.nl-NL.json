@@ -21,7 +21,7 @@
             "invalidState": "Beveiligingsvalidatie mislukt. Probeer opnieuw in te loggen.",
             "providerError": "De inlogprovider heeft een fout geretourneerd: %error%",
             "missingCode": "OAuth-aanmelding mislukt. Er is geen autorisatiecode ontvangen.",
-            "loginFailed": "Aanmelden mislukt. Probeer het opnieuw of gebruik uw e-mailadres en wachtwoord.",
+            "loginFailed": "Aanmelden mislukt. Probeer het opnieuw of kies een andere aanmeldmethode. Als het probleem aanhoudt, neem dan gerust contact op met onze klantenservice.",
             "noAccountFound": "Er is geen account gevonden voor deze identiteit. Log eerst in met uw gegevens en koppel daarna uw account vanuit uw profiel.",
             "accountAlreadyConnected": "Dit provideraccount is al gekoppeld aan een andere klant.",
             "loginRequired": "Log in voordat u een account koppelt.",
