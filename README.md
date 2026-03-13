@@ -124,12 +124,12 @@ final class MyProviderClientProvider extends ClientProviderContract
 
 ## Routes
 
-| Name                            | Path | Method |
-|---------------------------------|---|---|
-| `widgets.tinect.oauth.redirect` | `/account/oauth/{clientId}` | GET |
-| `tinect.oauth.connect`          | `/account/oauth/{clientId}/connect` | GET |
-| `tinect.oauth.callback`         | `/account/oauth/{clientId}/callback` | GET |
-| `tinect.oauth.disconnect`       | `/account/oauth/{clientId}/disconnect` | POST |
+| Name                               | Path | Method |
+|------------------------------------|---|---|
+| `widgets.tinect.oauth.redirect`    | `/account/oauth/{clientId}` | GET |
+| `widgets.tinect.oauth.connect`     | `/account/oauth/{clientId}/connect` | GET |
+| `tinect.oauth.callback`            | `/account/oauth/{clientId}/callback` | GET |
+| `widgets.tinect.oauth.disconnect`  | `/account/oauth/{clientId}/disconnect` | POST |
 
 ## Events
 
