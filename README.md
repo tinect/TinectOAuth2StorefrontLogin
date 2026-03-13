@@ -28,7 +28,7 @@ Create one entry per provider you want to offer:
 | **Provider** | `GitHub`, `OpenID Connect`, `Microsoft Entra ID`, or `Google Mail` |
 | **Active** | Toggle to enable/disable the button on the login page |
 | **Connect only** | When enabled the provider does not appear on the login page and will not create new customer accounts — it can only be used to link an existing account from the profile page |
-| **Require email verification on login** | When enabled, a key-based login only succeeds if the email address returned by the provider also matches the linked customer account. Useful for providers that always supply a verified email (e.g. Google, Microsoft). |
+| **Require email verification on login** | When enabled, a key-based login only succeeds if the email address returned by the provider also matches the linked customer account. Useful for providers that always supply a verified email (e.g. Google, Microsoft), and also when the shop owner needs to retain control over which email addresses are used, ensuring customers cannot bypass email policies through OAuth login. |
 | **Update email address on every login** | When enabled, the customer's email address in Shopware is updated to match the provider's email on each login. Useful when the provider (e.g. corporate SSO) is the authoritative source for email addresses. |
 
 ### GitHub
