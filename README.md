@@ -1,7 +1,7 @@
 # TinectOAuth2StorefrontLogin
 
 Adds OAuth2 / OpenID Connect login to the Shopware 6 storefront.
-Customers can sign in with GitHub or any OIDC-compatible provider, and can connect or disconnect providers from their account profile.
+Customers can sign in with GitHub, Microsoft Entra ID, Google, or any OpenID Connect provider, and can connect or disconnect providers from their account profile.
 
 ## Requirements
 
