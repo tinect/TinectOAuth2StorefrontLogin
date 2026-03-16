@@ -1,0 +1,23 @@
+{
+  "base": "/bundles/tinectoauth2storefrontlogin/administration/",
+  "entryPoints": {
+    "tinect-o-auth2-storefront-login": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/tinectoauth2storefrontlogin/administration/js/tinect-o-auth2-storefront-login.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}
