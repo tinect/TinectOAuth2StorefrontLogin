@@ -178,6 +178,5 @@ Component.register('tinect-oauth-storefront-client-edit-page', {
                     });
                 });
         },
-
     },
 });

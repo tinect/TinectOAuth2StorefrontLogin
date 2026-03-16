@@ -14,6 +14,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Tinect\OAuth2StorefrontLogin\Contract\User;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerConnectedEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerDisconnectedEvent;
+use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerEmailUpdatedEvent;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthAccountAlreadyConnectedException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailMismatchException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthNoAccountFoundException;
@@ -249,6 +250,122 @@ final class CustomerResolverTest extends TestCase
         $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
 
         $resolver->resolve($user, $this->clientId, $context);
+    }
+
+    public function testResolveTrustEmailLoginsWhenKeyAndEmailBothMatch(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'key-123';
+        $user->emails = ['user@example.com'];
+
+        $existingCustomerId = Uuid::randomHex();
+
+        $connection = $this->createMock(Connection::class);
+        $connection->method('fetchOne')->willReturn($existingCustomerId); // findCustomerIdByKeyAndEmail
+
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects(self::once())
+            ->method('loginById')
+            ->with($existingCustomerId);
+
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+
+        $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
+
+        $resolver->resolve($user, $this->clientId, $context, trustEmail: true);
+    }
+
+    public function testResolveTrustEmailThrowsMismatchWhenKeyFoundButEmailDiffers(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'key-123';
+        $user->emails = ['user@example.com'];
+
+        $existingCustomerId = Uuid::randomHex();
+
+        $connection = $this->createStub(Connection::class);
+        $connection->method('fetchOne')->willReturnOnConsecutiveCalls(
+            false,               // findCustomerIdByKeyAndEmail → no combined match
+            $existingCustomerId  // findCustomerIdByKey → key exists (different email)
+        );
+
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+
+        $resolver = $this->makeResolver(connection: $connection);
+
+        $this->expectException(OAuthEmailMismatchException::class);
+
+        $resolver->resolve($user, $this->clientId, $context, trustEmail: true);
+    }
+
+    public function testResolveTrustEmailFallsThroughToEmailLookupWhenNoKeyFound(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'key-123';
+        $user->emails = ['user@example.com'];
+
+        $existingCustomerId = Uuid::randomHex();
+
+        $connection = $this->createMock(Connection::class);
+        $connection->method('fetchOne')->willReturnOnConsecutiveCalls(
+            false,              // findCustomerIdByKeyAndEmail → no match
+            false,              // findCustomerIdByKey → no match
+            $existingCustomerId // findCustomerIdByEmail → email match
+        );
+        $connection->expects(self::once())->method('executeStatement'); // storeCustomerKey
+
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects(self::once())
+            ->method('loginById')
+            ->with($existingCustomerId);
+
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+
+        $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
+
+        $resolver->resolve($user, $this->clientId, $context, trustEmail: true);
+    }
+
+    public function testResolveUpdatesEmailWhenUpdateEmailOnLoginEnabled(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'key-123';
+        $user->emails = ['new@example.com'];
+        $user->primaryEmail = 'new@example.com';
+
+        $existingCustomerId = Uuid::randomHex();
+
+        $connection = $this->createMock(Connection::class);
+        $connection->method('fetchOne')->willReturnOnConsecutiveCalls(
+            $existingCustomerId, // findCustomerIdByKey
+            'old@example.com',   // updateCustomerEmail → fetch old email
+        );
+        $connection->expects(self::once())
+            ->method('executeStatement')
+            ->with(self::stringContains('UPDATE customer SET email'));
+
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects(self::once())
+            ->method('loginById')
+            ->with($existingCustomerId);
+
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $eventDispatcher->expects(self::once())
+            ->method('dispatch')
+            ->with(self::isInstanceOf(OAuthCustomerEmailUpdatedEvent::class));
+
+        $context = $this->createStub(SalesChannelContext::class);
+
+        $resolver = $this->makeResolver(
+            connection: $connection,
+            accountService: $accountService,
+            eventDispatcher: $eventDispatcher,
+        );
+
+        $resolver->resolve($user, $this->clientId, $context, updateEmailOnLogin: true);
     }
 
     // -------------------------------------------------------------------------

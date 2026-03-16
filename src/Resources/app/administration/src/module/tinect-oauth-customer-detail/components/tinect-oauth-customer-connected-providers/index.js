@@ -32,25 +32,33 @@ Component.register('tinect-oauth-customer-connected-providers', {
         },
 
         repository() {
-            return this.repositoryFactory.create('tinect_oauth_storefront_customer_key');
+            return this.repositoryFactory.create(
+                'tinect_oauth_storefront_customer_key'
+            );
         },
 
         columns() {
             return [
                 {
                     property: 'client.name',
-                    label: this.$tc('tinect-oauth-storefront-client.customerDetail.columnName'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.customerDetail.columnName'
+                    ),
                     primary: true,
                     allowResize: true,
                 },
                 {
                     property: 'client.provider',
-                    label: this.$tc('tinect-oauth-storefront-client.customerDetail.columnProvider'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.customerDetail.columnProvider'
+                    ),
                     allowResize: true,
                 },
                 {
                     property: 'createdAt',
-                    label: this.$tc('tinect-oauth-storefront-client.customerDetail.columnConnectedSince'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.customerDetail.columnConnectedSince'
+                    ),
                     allowResize: true,
                 },
             ];
@@ -95,7 +103,9 @@ Component.register('tinect-oauth-customer-connected-providers', {
                 .then(() => {
                     this.deleteKeyId = null;
                     this.createNotificationSuccess({
-                        message: this.$tc('tinect-oauth-storefront-client.customerDetail.disconnectSuccess'),
+                        message: this.$tc(
+                            'tinect-oauth-storefront-client.customerDetail.disconnectSuccess'
+                        ),
                     });
                     this.loadProviders();
                 })
@@ -103,7 +113,9 @@ Component.register('tinect-oauth-customer-connected-providers', {
                     this.isLoading = false;
                     this.deleteKeyId = null;
                     this.createNotificationError({
-                        message: this.$tc('tinect-oauth-storefront-client.customerDetail.disconnectError'),
+                        message: this.$tc(
+                            'tinect-oauth-storefront-client.customerDetail.disconnectError'
+                        ),
                     });
                 });
         },

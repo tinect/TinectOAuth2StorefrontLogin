@@ -7,6 +7,7 @@ use Shopware\Core\Checkout\Customer\Event\CustomerBeforeLoginEvent;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
@@ -66,8 +67,9 @@ final readonly class PasswordLoginSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
 
-        if ($request->hasSession()) {
-            $request->getSession()->getFlashBag()->add(
+        $session = $request->hasSession() ? $request->getSession() : null;
+        if ($session instanceof FlashBagAwareSessionInterface) {
+            $session->getFlashBag()->add(
                 'danger',
                 $this->translator->trans('tinect-oauth.error.passwordLoginDisabled'),
             );

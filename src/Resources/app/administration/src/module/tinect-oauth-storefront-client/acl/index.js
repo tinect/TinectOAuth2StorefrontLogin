@@ -15,25 +15,15 @@ Shopware.Service('privileges').addPrivilegeMappingEntry({
                 'tinect_oauth_storefront_client:update',
                 'tinect_oauth_storefront_customer_key:delete',
             ],
-            dependencies: [
-                'tinect_oauth_storefront_client.viewer',
-            ],
+            dependencies: ['tinect_oauth_storefront_client.viewer'],
         },
         creator: {
-            privileges: [
-                'tinect_oauth_storefront_client:create',
-            ],
-            dependencies: [
-                'tinect_oauth_storefront_client.editor',
-            ],
+            privileges: ['tinect_oauth_storefront_client:create'],
+            dependencies: ['tinect_oauth_storefront_client.editor'],
         },
         deleter: {
-            privileges: [
-                'tinect_oauth_storefront_client:delete',
-            ],
-            dependencies: [
-                'tinect_oauth_storefront_client.viewer',
-            ],
+            privileges: ['tinect_oauth_storefront_client:delete'],
+            dependencies: ['tinect_oauth_storefront_client.viewer'],
         },
     },
 });

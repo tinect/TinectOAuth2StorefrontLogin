@@ -42,9 +42,19 @@ final readonly class CustomerResolver
         // 1. Existing OAuth key mapping → direct login
         //    When trustEmail is enabled, the email from the provider must also
         //    match the customer the key is mapped to.
-        $customerId = $trustEmail
-            ? $this->findCustomerIdByKeyAndEmail($clientId, $user->primaryKey, $user->emails, $context->getSalesChannelId())
-            : $this->findCustomerIdByKey($clientId, $user->primaryKey);
+        $customerId = null;
+        if ($trustEmail) {
+            $customerId = $this->findCustomerIdByKeyAndEmail($clientId, $user->primaryKey, $user->emails, $context->getSalesChannelId());
+        }
+
+        if ($customerId === null) {
+            $customerId = $this->findCustomerIdByKey($clientId, $user->primaryKey);
+
+            if ($customerId !== null && $trustEmail) {
+                // If we found a customer just by key but trustEmail is enabled, we need to throw mismatch exception
+                throw new OAuthEmailMismatchException();
+            }
+        }
 
         if ($customerId !== null) {
             if ($updateEmailOnLogin && $user->primaryEmail !== '') {

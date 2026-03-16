@@ -1,5 +1,6 @@
 {% block sw_customer_detail_base_info_holder %}
-{% parent %}
+{% parent() %}
+
 <tinect-oauth-customer-connected-providers
     v-if="customer && customer.id && acl.can('tinect_oauth_storefront_client.viewer')"
     :customer-id="customer.id"

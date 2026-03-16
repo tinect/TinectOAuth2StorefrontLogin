@@ -28,13 +28,11 @@
             </sw-context-menu-item>
         </template>
     </sw-data-grid>
-
     <sw-empty-state
         v-else-if="!isLoading"
         :title="$tc('tinect-oauth-storefront-client.customerDetail.emptyState')"
         :show-description="false"
     ></sw-empty-state>
-
     <sw-confirm-modal
         v-if="showDeleteModal"
         type="delete"

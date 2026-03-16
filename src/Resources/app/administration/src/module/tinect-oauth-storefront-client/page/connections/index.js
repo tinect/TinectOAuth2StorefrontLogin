@@ -8,10 +8,7 @@ Component.register('tinect-oauth-storefront-connections-page', {
 
     inject: ['acl', 'repositoryFactory'],
 
-    mixins: [
-        Mixin.getByName('listing'),
-        Mixin.getByName('notification'),
-    ],
+    mixins: [Mixin.getByName('listing'), Mixin.getByName('notification')],
 
     data() {
         return {
@@ -26,7 +23,9 @@ Component.register('tinect-oauth-storefront-connections-page', {
 
     computed: {
         repository() {
-            return this.repositoryFactory.create('tinect_oauth_storefront_customer_key');
+            return this.repositoryFactory.create(
+                'tinect_oauth_storefront_customer_key'
+            );
         },
 
         dateFilter() {
@@ -37,28 +36,38 @@ Component.register('tinect-oauth-storefront-connections-page', {
             return [
                 {
                     property: 'customer.customerNumber',
-                    label: this.$tc('tinect-oauth-storefront-client.connections.columnCustomerNumber'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.connections.columnCustomerNumber'
+                    ),
                     allowResize: true,
                 },
                 {
                     property: 'customer.email',
-                    label: this.$tc('tinect-oauth-storefront-client.connections.columnCustomer'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.connections.columnCustomer'
+                    ),
                     allowResize: true,
                     primary: true,
                 },
                 {
                     property: 'client.name',
-                    label: this.$tc('tinect-oauth-storefront-client.connections.columnClient'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.connections.columnClient'
+                    ),
                     allowResize: true,
                 },
                 {
                     property: 'client.provider',
-                    label: this.$tc('tinect-oauth-storefront-client.connections.columnProvider'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.connections.columnProvider'
+                    ),
                     allowResize: true,
                 },
                 {
                     property: 'createdAt',
-                    label: this.$tc('tinect-oauth-storefront-client.connections.columnConnectedSince'),
+                    label: this.$tc(
+                        'tinect-oauth-storefront-client.connections.columnConnectedSince'
+                    ),
                     allowResize: true,
                 },
             ];
@@ -108,7 +117,9 @@ Component.register('tinect-oauth-storefront-connections-page', {
                 .then(() => {
                     this.deleteConnectionId = null;
                     this.createNotificationSuccess({
-                        message: this.$tc('tinect-oauth-storefront-client.connections.deleteSuccess'),
+                        message: this.$tc(
+                            'tinect-oauth-storefront-client.connections.deleteSuccess'
+                        ),
                     });
                     this.getList();
                 })
@@ -116,7 +127,9 @@ Component.register('tinect-oauth-storefront-connections-page', {
                     this.isLoading = false;
                     this.deleteConnectionId = null;
                     this.createNotificationError({
-                        message: this.$tc('tinect-oauth-storefront-client.connections.deleteError'),
+                        message: this.$tc(
+                            'tinect-oauth-storefront-client.connections.deleteError'
+                        ),
                     });
                 });
         },
@@ -139,7 +152,9 @@ Component.register('tinect-oauth-storefront-connections-page', {
             if (!customer) {
                 return '—';
             }
-            const name = [customer.firstName, customer.lastName].filter(Boolean).join(' ');
+            const name = [customer.firstName, customer.lastName]
+                .filter(Boolean)
+                .join(' ');
             return name ? `${name} (${customer.email})` : customer.email;
         },
     },
