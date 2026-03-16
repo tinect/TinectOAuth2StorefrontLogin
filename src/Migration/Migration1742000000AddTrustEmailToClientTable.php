@@ -21,8 +21,7 @@ class Migration1742000000AddTrustEmailToClientTable extends MigrationStep
         if (empty($columns)) {
             $connection->executeStatement('
                 ALTER TABLE `tinect_oauth_storefront_client`
-                ADD COLUMN `trust_email` TINYINT(1) NOT NULL DEFAULT 0
-                    AFTER `connect_only`;
+                ADD COLUMN `trust_email` TINYINT(1) NOT NULL DEFAULT 0;
             ');
         }
     }

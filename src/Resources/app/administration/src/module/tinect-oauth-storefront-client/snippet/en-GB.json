@@ -32,6 +32,8 @@
             "labelUpdateEmailOnLoginHelp": "If enabled, the customer's email address in Shopware is updated to match the email returned by the provider on each login. Useful when the provider (e.g. corporate SSO) is the authoritative source for email addresses.",
             "labelDisablePasswordLogin": "Disable password login",
             "labelDisablePasswordLoginHelp": "If enabled, customers who have linked their account with this provider will no longer be able to log in using their email address and password. They must use this OAuth provider to sign in.",
+            "labelHideLoginButton": "Hide login button",
+            "labelHideLoginButtonHelp": "If enabled, the login button for this provider will not be shown on the storefront login page. The provider can still be used to connect accounts from the customer profile.",
             "buttonSave": "Save",
             "buttonBack": "Back to list",
             "buttonDelete": "Delete",

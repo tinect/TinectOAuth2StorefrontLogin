@@ -96,6 +96,12 @@
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLoginHelp')"
                         :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                     ></sw-switch-field>
+                    <sw-switch-field
+                        v-model:value="client.hideLoginButton"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelHideLoginButton')"
+                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelHideLoginButtonHelp')"
+                        :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
+                    ></sw-switch-field>
                 </sw-container>
             </sw-card>
             {% endblock %}

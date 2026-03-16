@@ -34,6 +34,10 @@ final class OAuthTwigExtension extends AbstractExtension
         $result = [];
 
         foreach ($clients as $client) {
+            if ($client->hideLoginButton) {
+                continue;
+            }
+
             $result[] = [
                 'id' => $client->id,
                 'name' => $client->name ?? '',

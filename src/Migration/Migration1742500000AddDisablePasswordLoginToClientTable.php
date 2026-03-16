@@ -21,8 +21,7 @@ class Migration1742500000AddDisablePasswordLoginToClientTable extends MigrationS
         if (empty($columns)) {
             $connection->executeStatement('
                 ALTER TABLE `tinect_oauth_storefront_client`
-                ADD COLUMN `disable_password_login` TINYINT(1) NOT NULL DEFAULT 0
-                    AFTER `update_email_on_login`;
+                ADD COLUMN `disable_password_login` TINYINT(1) NOT NULL DEFAULT 0;
             ');
         }
     }

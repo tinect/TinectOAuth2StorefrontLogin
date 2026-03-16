@@ -21,8 +21,7 @@ class Migration1742000001AddUpdateEmailOnLoginToClientTable extends MigrationSte
         if (empty($columns)) {
             $connection->executeStatement('
                 ALTER TABLE `tinect_oauth_storefront_client`
-                ADD COLUMN `update_email_on_login` TINYINT(1) NOT NULL DEFAULT 0
-                    AFTER `trust_email`;
+                ADD COLUMN `update_email_on_login` TINYINT(1) NOT NULL DEFAULT 0;
             ');
         }
     }

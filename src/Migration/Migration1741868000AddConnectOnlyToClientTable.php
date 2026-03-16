@@ -21,8 +21,7 @@ class Migration1741868000AddConnectOnlyToClientTable extends MigrationStep
         if (empty($columns)) {
             $connection->executeStatement('
                 ALTER TABLE `tinect_oauth_storefront_client`
-                ADD COLUMN `connect_only` TINYINT(1) NOT NULL DEFAULT 0
-                    AFTER `active`;
+                ADD COLUMN `connect_only` TINYINT(1) NOT NULL DEFAULT 0;
             ');
         }
     }
