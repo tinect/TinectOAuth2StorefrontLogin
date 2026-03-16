@@ -5,7 +5,7 @@ Customers can sign in with GitHub, Microsoft Entra ID, Google, or any OpenID Con
 
 ## Requirements
 
-- Shopware `~6.6.0`
+- Shopware `~6.6.0||~6.7.0`
 
 ## Installation
 
