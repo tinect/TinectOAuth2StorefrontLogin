@@ -2,7 +2,7 @@
     "tinect-oauth": {
         "login": {
             "orLoginWith": "oder weiter mit",
-            "loginWith": "Weiter mit %provider%"
+            "loginWith": "Anmelden mit %provider%"
         },
         "connect": {
             "title": "Verbundene Konten",

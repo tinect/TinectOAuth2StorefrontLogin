@@ -2,7 +2,7 @@
     "tinect-oauth": {
         "login": {
             "orLoginWith": "of doorgaan met",
-            "loginWith": "Doorgaan met %provider%"
+            "loginWith": "Aanmelden met %provider%"
         },
         "connect": {
             "title": "Gekoppelde accounts",
