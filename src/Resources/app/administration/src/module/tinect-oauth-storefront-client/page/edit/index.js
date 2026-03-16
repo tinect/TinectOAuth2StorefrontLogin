@@ -150,6 +150,9 @@ Component.register('tinect-oauth-storefront-client-edit-page', {
                         ),
                     });
                 })
+                .then(() => {
+                    return this.loadClient();
+                })
                 .catch(() => {
                     this.isLoading = false;
                     this.createNotificationError({
