@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthPasswordLoginDisabledException;
+use Tinect\OAuth2StorefrontLogin\Service\CustomerResolver;
 
 final readonly class PasswordLoginSubscriber implements EventSubscriberInterface
 {
@@ -33,6 +34,10 @@ final readonly class PasswordLoginSubscriber implements EventSubscriberInterface
 
     public function onBeforeLogin(CustomerBeforeLoginEvent $event): void
     {
+        if ($event->getContext()->hasState(CustomerResolver::STATE)) {
+            return;
+        }
+
         $salesChannelId = $event->getSalesChannelContext()->getSalesChannelId();
 
         $result = $this->connection->fetchOne(

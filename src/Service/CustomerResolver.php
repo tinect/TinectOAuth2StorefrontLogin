@@ -28,6 +28,8 @@ use Tinect\OAuth2StorefrontLogin\Exception\OAuthNoAccountFoundException;
 
 final readonly class CustomerResolver
 {
+    public const STATE = 'oauth2_storefront_login_resolving_customer';
+
     public function __construct(
         private Connection $connection,
         private AccountService $accountService,
@@ -39,6 +41,8 @@ final readonly class CustomerResolver
 
     public function resolve(User $user, string $clientId, SalesChannelContext $context, bool $allowRegistration = true, bool $trustEmail = false, bool $updateEmailOnLogin = false): void
     {
+        $context->addState(self::STATE);
+
         // 1. Existing OAuth key mapping → direct login
         //    When trustEmail is enabled, the email from the provider must also
         //    match the customer the key is mapped to.
