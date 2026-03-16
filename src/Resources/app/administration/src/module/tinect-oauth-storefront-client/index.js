@@ -19,6 +19,7 @@ Module.register('tinect-oauth-storefront-client', {
             path: 'list',
             meta: {
                 privilege: 'tinect_oauth_storefront_client.viewer',
+                parentPath: 'sw.settings.index.system',
             },
         },
         create: {
@@ -26,6 +27,7 @@ Module.register('tinect-oauth-storefront-client', {
             path: 'create',
             meta: {
                 privilege: 'tinect_oauth_storefront_client.creator',
+                parentPath: 'tinect.oauth.storefront.client.list',
             },
         },
         edit: {
@@ -33,6 +35,7 @@ Module.register('tinect-oauth-storefront-client', {
             path: 'edit/:id',
             meta: {
                 privilege: 'tinect_oauth_storefront_client.editor',
+                parentPath: 'tinect.oauth.storefront.client.list',
             },
             props: {
                 default(route) {
@@ -45,6 +48,7 @@ Module.register('tinect-oauth-storefront-client', {
             path: 'connections',
             meta: {
                 privilege: 'tinect_oauth_storefront_client.viewer',
+                parentPath: 'tinect.oauth.storefront.client.list',
             },
         },
     },

@@ -65,6 +65,10 @@ Component.register('tinect-oauth-storefront-client-listing-page', {
 
     methods: {
         getList() {
+            if (this.repository === null) {
+                return;
+            }
+
             this.isLoading = true;
 
             const criteria = new Criteria(this.page, this.limit);

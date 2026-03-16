@@ -126,10 +126,6 @@ Component.register('tinect-oauth-storefront-connections-page', {
             this.deleteConnectionId = null;
         },
 
-        onBack() {
-            this.$router.push({ name: 'tinect.oauth.storefront.client.list' });
-        },
-
         providerLabel(provider) {
             if (!provider) {
                 return '';

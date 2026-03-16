@@ -18,12 +18,6 @@
 
     {% block tinect_oauth_storefront_client_edit_smart_bar_actions %}
     <template #smart-bar-actions>
-        <sw-button
-            :disabled="isLoading"
-            @click="onBack"
-        >
-            {{ $tc('tinect-oauth-storefront-client.edit.buttonBack') }}
-        </sw-button>
         <sw-button-process
             v-if="!isCreateMode && acl.can('tinect_oauth_storefront_client.editor')"
             class="sw-settings-login-registration__save-action"

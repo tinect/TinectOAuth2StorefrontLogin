@@ -179,8 +179,5 @@ Component.register('tinect-oauth-storefront-client-edit-page', {
                 });
         },
 
-        onBack() {
-            this.$router.push({ name: 'tinect.oauth.storefront.client.list' });
-        },
     },
 });
