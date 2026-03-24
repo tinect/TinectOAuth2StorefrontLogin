@@ -183,7 +183,7 @@ class OAuthController extends StorefrontController
             $user = $this->clientLoader->load($clientId, $context->getContext(), $entity)
                 ->getUser($state, $code, $this->buildRedirectBehaviour($clientId));
 
-            $this->customerResolver->resolve($user, $clientId, $context, allowRegistration: !$entity->connectOnly, trustEmail: $entity->trustEmail, updateEmailOnLogin: $entity->updateEmailOnLogin);
+            $this->customerResolver->resolve($user, $clientId, $entity->name, $context, allowRegistration: !$entity->connectOnly, trustEmail: $entity->trustEmail, updateEmailOnLogin: $entity->updateEmailOnLogin);
         } catch (OAuthException $e) {
             $this->addOAuthFlash($e);
 

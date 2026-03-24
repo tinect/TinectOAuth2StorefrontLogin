@@ -39,7 +39,7 @@ final readonly class CustomerResolver
     ) {
     }
 
-    public function resolve(User $user, string $clientId, SalesChannelContext $context, bool $allowRegistration = true, bool $trustEmail = false, bool $updateEmailOnLogin = false): void
+    public function resolve(User $user, string $clientId, string $providerName, SalesChannelContext $context, bool $allowRegistration = true, bool $trustEmail = false, bool $updateEmailOnLogin = false): void
     {
         $context->addState(self::STATE);
 
@@ -82,7 +82,7 @@ final readonly class CustomerResolver
 
         // 3. No customer yet → register only if allowed
         if (!$allowRegistration) {
-            throw new OAuthNoAccountFoundException();
+            throw new OAuthNoAccountFoundException($providerName);
         }
 
         $newCustomerId = $this->registerNewCustomer($user, $context);

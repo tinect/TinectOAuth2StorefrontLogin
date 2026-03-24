@@ -23,7 +23,7 @@
             "missingCode": "La connexion OAuth a échoué. Aucun code d'autorisation n'a été reçu.",
             "loginFailed": "La connexion a échoué. Veuillez réessayer ou utiliser une autre méthode de connexion. Si le problème persiste, n'hésitez pas à contacter notre service d'assistance.",
             "passwordLoginDisabled": "La connexion par mot de passe n'est pas disponible pour votre compte. Veuillez vous connecter via votre fournisseur d'identité associé.",
-            "noAccountFound": "Aucun compte n'a été trouvé pour cette identité. Veuillez d'abord vous connecter avec vos identifiants, puis associer votre compte depuis votre profil.",
+            "noAccountFound": "Aucun compte correspondant à votre connexion %provider% n’a été trouvé. Veuillez d’abord vous inscrire pour continuer.",
             "accountAlreadyConnected": "Ce compte fournisseur est déjà lié à un autre client.",
             "loginRequired": "Veuillez vous connecter avant d'associer un compte.",
             "connectFailed": "Impossible de connecter le compte. Veuillez réessayer.",

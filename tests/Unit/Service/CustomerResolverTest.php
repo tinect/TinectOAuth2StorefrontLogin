@@ -198,7 +198,7 @@ final class CustomerResolverTest extends TestCase
 
         $this->expectException(OAuthNoAccountFoundException::class);
 
-        $resolver->resolve($user, $this->clientId, $context, allowRegistration: false);
+        $resolver->resolve($user, $this->clientId, 'any', $context, allowRegistration: false);
     }
 
     public function testResolveLoginsDirectlyByExistingOAuthKey(): void
@@ -221,7 +221,7 @@ final class CustomerResolverTest extends TestCase
 
         $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
 
-        $resolver->resolve($user, $this->clientId, $context);
+        $resolver->resolve($user, $this->clientId, 'any', $context);
     }
 
     public function testResolveLinksAndLoginsExistingCustomerByEmail(): void
@@ -249,7 +249,7 @@ final class CustomerResolverTest extends TestCase
 
         $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
 
-        $resolver->resolve($user, $this->clientId, $context);
+        $resolver->resolve($user, $this->clientId, 'any', $context);
     }
 
     public function testResolveTrustEmailLoginsWhenKeyAndEmailBothMatch(): void
@@ -273,7 +273,7 @@ final class CustomerResolverTest extends TestCase
 
         $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
 
-        $resolver->resolve($user, $this->clientId, $context, trustEmail: true);
+        $resolver->resolve($user, $this->clientId, 'any', $context, trustEmail: true);
     }
 
     public function testResolveTrustEmailThrowsMismatchWhenKeyFoundButEmailDiffers(): void
@@ -297,7 +297,7 @@ final class CustomerResolverTest extends TestCase
 
         $this->expectException(OAuthEmailMismatchException::class);
 
-        $resolver->resolve($user, $this->clientId, $context, trustEmail: true);
+        $resolver->resolve($user, $this->clientId, 'any', $context, trustEmail: true);
     }
 
     public function testResolveTrustEmailFallsThroughToEmailLookupWhenNoKeyFound(): void
@@ -326,7 +326,7 @@ final class CustomerResolverTest extends TestCase
 
         $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
 
-        $resolver->resolve($user, $this->clientId, $context, trustEmail: true);
+        $resolver->resolve($user, $this->clientId, 'any', $context, trustEmail: true);
     }
 
     public function testResolveUpdatesEmailWhenUpdateEmailOnLoginEnabled(): void
@@ -365,7 +365,7 @@ final class CustomerResolverTest extends TestCase
             eventDispatcher: $eventDispatcher,
         );
 
-        $resolver->resolve($user, $this->clientId, $context, updateEmailOnLogin: true);
+        $resolver->resolve($user, $this->clientId, 'any', $context, updateEmailOnLogin: true);
     }
 
     // -------------------------------------------------------------------------
