@@ -18,9 +18,9 @@
         "error": {
             "clientNotFound": "This login provider is not available.",
             "providerNotConfigured": "This login provider is not configured correctly. Please contact support.",
-            "invalidState": "Security validation failed. Please try logging in again.",
+            "invalidState": "Something went wrong. Please try logging in again.",
             "providerError": "The login provider returned an error: %error%",
-            "missingCode": "OAuth login failed. No authorisation code was received.",
+            "missingCode": "Login failed. Please try again.",
             "loginFailed": "Login failed. Please try again or use a different login method. If the problem persists, feel free to contact our support team.",
             "passwordLoginDisabled": "Password login is not available for your account. Please use your connected login provider to sign in.",
             "noAccountFound": "No matching account was found for your %provider% login. Please register first to continue.",

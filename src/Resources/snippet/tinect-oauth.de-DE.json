@@ -18,16 +18,16 @@
         "error": {
             "clientNotFound": "Dieser Login-Anbieter ist nicht verfügbar.",
             "providerNotConfigured": "Dieser Login-Anbieter ist nicht korrekt konfiguriert. Bitte den Support kontaktieren.",
-            "invalidState": "Sicherheitsvalidierung fehlgeschlagen. Bitte erneut anmelden.",
+            "invalidState": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie sich erneut anzumelden.",
             "providerError": "Der Login-Anbieter hat einen Fehler zurückgegeben: %error%",
-            "missingCode": "OAuth-Anmeldung fehlgeschlagen. Kein Autorisierungscode erhalten.",
-            "loginFailed": "Die Anmeldung ist leider fehlgeschlagen. Bitte versuche, Sie es erneut oder nutzen Sie eine andere Anmeldemethode. Falls das Problem weiterhin besteht, wendem Sie sich bitte an unseren Support.",
+            "missingCode": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+            "loginFailed": "Die Anmeldung ist leider fehlgeschlagen. Bitte versuchen Sie es erneut oder nutzen Sie eine andere Anmeldemethode. Falls das Problem weiterhin besteht, wenden Sie sich bitte an unseren Support.",
             "passwordLoginDisabled": "Die Anmeldung per Passwort ist für Ihr Konto nicht möglich. Bitte melden Sie sich über Ihren verknüpften Anbieter an.",
             "noAccountFound": "Es konnte bei uns kein passender Account zu Ihrem %provider%-Login gefunden werden. Bitte registrieren Sie sich zuerst, um fortzufahren.",
             "accountAlreadyConnected": "Dieses Anbieter-Konto ist bereits mit einem anderen Kundenkonto verknüpft.",
-            "loginRequired": "Bitte zuerst anmelden, bevor ein Konto verknüpft wird.",
-            "connectFailed": "Das Konto konnte nicht verknüpft werden. Bitte erneut versuchen.",
-            "disconnectFailed": "Die Verbindung konnte nicht getrennt werden. Bitte erneut versuchen.",
+            "loginRequired": "Bitte melden Sie sich zuerst an, bevor Sie ein Konto verknüpfen.",
+            "connectFailed": "Das Konto konnte nicht verknüpft werden. Bitte versuchen Sie es erneut.",
+            "disconnectFailed": "Die Verbindung konnte nicht getrennt werden. Bitte versuchen Sie es erneut.",
             "emailMismatch": "Die E-Mail-Adresse des Anbieters stimmt nicht mit der Konto-E-Mail überein. Falls sich Ihre E-Mail-Adresse geändert hat, wenden Sie sich bitte an den Shop-Betreiber."
         }
     }

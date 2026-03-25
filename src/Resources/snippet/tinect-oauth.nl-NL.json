@@ -18,9 +18,9 @@
         "error": {
             "clientNotFound": "Deze inlogprovider is niet beschikbaar.",
             "providerNotConfigured": "Deze inlogprovider is niet correct geconfigureerd. Neem contact op met de klantenservice.",
-            "invalidState": "Beveiligingsvalidatie mislukt. Probeer opnieuw in te loggen.",
+            "invalidState": "Er is iets misgegaan. Probeer opnieuw in te loggen.",
             "providerError": "De inlogprovider heeft een fout geretourneerd: %error%",
-            "missingCode": "OAuth-aanmelding mislukt. Er is geen autorisatiecode ontvangen.",
+            "missingCode": "Aanmelden mislukt. Probeer het opnieuw.",
             "loginFailed": "Aanmelden mislukt. Probeer het opnieuw of kies een andere aanmeldmethode. Als het probleem aanhoudt, neem dan gerust contact op met onze klantenservice.",
             "passwordLoginDisabled": "Aanmelden met een wachtwoord is niet mogelijk voor uw account. Gebruik uw gekoppelde aanmeldprovider om in te loggen.",
             "noAccountFound": "Er is geen passend account gevonden voor uw %provider%-login. Registreer u eerst om verder te gaan.",

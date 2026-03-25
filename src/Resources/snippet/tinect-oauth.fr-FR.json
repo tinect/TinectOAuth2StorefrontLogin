@@ -18,9 +18,9 @@
         "error": {
             "clientNotFound": "Ce fournisseur de connexion n'est pas disponible.",
             "providerNotConfigured": "Ce fournisseur de connexion n'est pas configuré correctement. Veuillez contacter le support.",
-            "invalidState": "La validation de sécurité a échoué. Veuillez réessayer de vous connecter.",
+            "invalidState": "Une erreur s'est produite. Veuillez réessayer de vous connecter.",
             "providerError": "Le fournisseur de connexion a renvoyé une erreur : %error%",
-            "missingCode": "La connexion OAuth a échoué. Aucun code d'autorisation n'a été reçu.",
+            "missingCode": "La connexion a échoué. Veuillez réessayer.",
             "loginFailed": "La connexion a échoué. Veuillez réessayer ou utiliser une autre méthode de connexion. Si le problème persiste, n'hésitez pas à contacter notre service d'assistance.",
             "passwordLoginDisabled": "La connexion par mot de passe n'est pas disponible pour votre compte. Veuillez vous connecter via votre fournisseur d'identité associé.",
             "noAccountFound": "Aucun compte correspondant à votre connexion %provider% n’a été trouvé. Veuillez d’abord vous inscrire pour continuer.",
