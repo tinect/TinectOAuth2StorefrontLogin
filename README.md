@@ -158,6 +158,55 @@ The plugin dispatches the following events that you can subscribe to:
 
 All events are in the `Tinect\OAuth2StorefrontLogin\Event` namespace.
 
+## Data Protection (GDPR / DSGVO)
+
+> **Disclaimer:** This section is provided as a technical orientation for shop operators and is neither complete nor legally binding. It does not constitute legal advice. Data protection requirements depend on your specific setup, jurisdiction, and business context. Always consult a qualified legal professional before publishing or updating your privacy policy.
+
+This section helps shop operators understand what personal data the plugin processes so they can update their privacy policy accordingly.
+
+### Data stored by the plugin
+
+The plugin creates one database record per customer–provider connection (`tinect_oauth_storefront_customer_key`):
+
+| Field | Content |
+|---|---|
+| `customer_id` | Reference to the Shopware customer |
+| `client_id` | Reference to the configured OAuth provider |
+| `primary_key` | The provider-side user identifier (e.g. GitHub user ID, OIDC `sub` claim) |
+| `created_at` / `updated_at` | Timestamps |
+
+Name and e-mail address are stored in the standard Shopware `customer` table — not in any plugin-specific table.
+
+**Access tokens are never persisted.** They are only held in memory for the duration of a single request.
+
+### Data received from third-party providers
+
+During login the plugin contacts the provider's API server-side to exchange the authorisation code and retrieve the user's profile. The following providers are built in:
+
+| Provider | API endpoint | Remarks |
+|---|---|---|
+| GitHub | `api.github.com` (USA) | Data transfer to a third country; cover via EU–US DPF or SCCs |
+| Google Mail | `accounts.google.com` | EU–US DPF |
+| Microsoft Entra ID | Configurable (Azure) | EU data centres available depending on tenant configuration |
+| OpenID Connect (generic) | Configurable | Depends on the provider chosen by the shop operator |
+
+### Deletion
+
+When a customer account is deleted from Shopware, all associated OAuth keys are deleted automatically via `ON DELETE CASCADE`. Customers can also disconnect individual providers themselves from their account profile page.
+
+### Note on registration consent
+
+When the plugin automatically creates a new customer account, it sets `acceptedDataProtection = true` internally so that Shopware accepts the registration. The plugin does **not** display a consent checkbox during the OAuth flow. Shop operators must ensure that consent to the privacy policy is obtained before the customer initiates the OAuth login — for example by adding a checkbox or notice to the storefront login template.
+
+### What to mention in your privacy policy
+
+- That customers can log in via third-party OAuth providers (list the ones you have configured).
+- Which personal data is received from each provider (e-mail address, name, provider user ID).
+- That the provider user ID is stored to maintain the login connection.
+- If **Update email address on every login** is enabled: that the e-mail address stored in the shop may be updated on each login to reflect the provider's current value.
+- The legal basis for the processing (typically Art. 6(1)(b) GDPR — performance of a contract).
+- For providers outside the EU/EEA: the mechanism used for the third-country transfer (EU–US DPF, SCCs, etc.).
+
 ## License
 
 MIT
