@@ -29,7 +29,7 @@ Create one entry per provider you want to offer:
 | **Connect only** | When enabled the provider will not create new customer accounts — it can only be used to link an existing account from the profile page |
 | **Require email verification on login** | When enabled, a key-based login only succeeds if the email address returned by the provider also matches the linked customer account. Useful for providers that always supply a verified email (e.g. Google, Microsoft), and also when the shop owner needs to retain control over which email addresses are used, ensuring customers cannot bypass email policies through OAuth login. |
 | **Update email address on every login** | When enabled, the customer's email address in Shopware is updated to match the provider's email on each login. Useful when the provider (e.g. corporate SSO) is the authoritative source for email addresses. |
-| **Disable password login** | When enabled, customers who have a connected account with this provider can no longer log in using their email and password — they must use this OAuth provider instead. |
+| **Force OAuth login** | When enabled, customers who have a connected account with this provider are automatically redirected to this OAuth provider when they try to log in with email and password. |
 | **Hide login button** | When enabled, the login button for this provider is not shown on the storefront login page. The provider can still be used to connect accounts from the customer profile page. |
 
 ### GitHub

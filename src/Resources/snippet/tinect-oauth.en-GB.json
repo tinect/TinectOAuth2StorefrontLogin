@@ -22,7 +22,6 @@
             "providerError": "The login provider returned an error: %error%",
             "missingCode": "Login failed. Please try again.",
             "loginFailed": "Login failed. Please try again or use a different login method. If the problem persists, feel free to contact our support team.",
-            "passwordLoginDisabled": "Password login is not available for your account. Please use your connected login provider to sign in.",
             "noAccountFound": "No matching account was found for your %provider% login. Please register first to continue.",
             "accountAlreadyConnected": "This provider account is already linked to a different customer.",
             "loginRequired": "Please log in before connecting an account.",

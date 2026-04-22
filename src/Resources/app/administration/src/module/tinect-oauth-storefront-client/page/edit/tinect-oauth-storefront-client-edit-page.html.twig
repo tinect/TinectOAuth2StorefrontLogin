@@ -91,9 +91,9 @@
                         :help-text="$tc('tinect-oauth-storefront-client.edit.labelUpdateEmailOnLoginHelp')"
                     ></sw-switch-field>
                     <sw-switch-field
-                        v-model:value="client.disablePasswordLogin"
-                        :label="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLogin')"
-                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelDisablePasswordLoginHelp')"
+                        v-model:value="client.forceOAuth"
+                        :label="$tc('tinect-oauth-storefront-client.edit.labelForceOAuth')"
+                        :help-text="$tc('tinect-oauth-storefront-client.edit.labelForceOAuthHelp')"
                         :disabled="!acl.can('tinect_oauth_storefront_client.editor')"
                     ></sw-switch-field>
                     <sw-switch-field

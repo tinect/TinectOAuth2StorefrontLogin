@@ -22,7 +22,6 @@
             "providerError": "De inlogprovider heeft een fout geretourneerd: %error%",
             "missingCode": "Aanmelden mislukt. Probeer het opnieuw.",
             "loginFailed": "Aanmelden mislukt. Probeer het opnieuw of kies een andere aanmeldmethode. Als het probleem aanhoudt, neem dan gerust contact op met onze klantenservice.",
-            "passwordLoginDisabled": "Aanmelden met een wachtwoord is niet mogelijk voor uw account. Gebruik uw gekoppelde aanmeldprovider om in te loggen.",
             "noAccountFound": "Er is geen passend account gevonden voor uw %provider%-login. Registreer u eerst om verder te gaan.",
             "accountAlreadyConnected": "Dit provideraccount is al gekoppeld aan een andere klant.",
             "loginRequired": "Log in voordat u een account koppelt.",

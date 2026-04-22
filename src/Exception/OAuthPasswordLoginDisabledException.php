@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OAuthPasswordLoginDisabledException extends ShopwareHttpException
 {
-    public function __construct()
+    public function __construct(public readonly string $clientId = '')
     {
         parent::__construct('Password login is disabled for this account.');
     }
