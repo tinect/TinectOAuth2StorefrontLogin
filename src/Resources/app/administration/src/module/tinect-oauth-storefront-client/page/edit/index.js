@@ -98,7 +98,7 @@ Component.register('tinect-oauth-storefront-client-edit-page', {
             this.client.connectOnly = false;
             this.client.trustEmail = false;
             this.client.updateEmailOnLogin = false;
-            this.client.disablePasswordLogin = false;
+            this.client.disablePasswordLogin = true;
             this.client.hideLoginButton = false;
             this.client.config = {};
         } else {

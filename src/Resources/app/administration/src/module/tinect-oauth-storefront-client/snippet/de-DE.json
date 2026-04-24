@@ -31,7 +31,7 @@
             "labelUpdateEmailOnLogin": "E-Mail-Adresse bei jeder Anmeldung aktualisieren",
             "labelUpdateEmailOnLoginHelp": "Wenn aktiviert, wird die E-Mail-Adresse des Kunden in Shopware bei jeder Anmeldung auf die vom Anbieter zurückgegebene E-Mail-Adresse aktualisiert. Nützlich, wenn der Anbieter (z. B. unternehmensweites SSO) die maßgebliche Quelle für E-Mail-Adressen ist.",
             "labelDisablePasswordLogin": "Passwort-Anmeldung deaktivieren",
-            "labelDisablePasswordLoginHelp": "Wenn aktiviert, können Kunden, die ihr Konto mit diesem Anbieter verknüpft haben, sich nicht mehr per E-Mail-Adresse und Passwort anmelden. Sie müssen diesen OAuth-Anbieter zur Anmeldung verwenden.",
+            "labelDisablePasswordLoginHelp": "Wenn aktiviert, können Kunden, die ihr Konto mit diesem Anbieter verknüpft haben, sich nicht mehr per E-Mail-Adresse und Passwort anmelden. Sie müssen diesen OAuth-Anbieter zur Anmeldung verwenden. Standardmäßig aktiviert.",
             "labelHideLoginButton": "Login-Button ausblenden",
             "labelHideLoginButtonHelp": "Wenn aktiviert, wird der Login-Button für diesen Anbieter auf der Storefront-Anmeldeseite nicht angezeigt. Der Anbieter kann weiterhin verwendet werden, um Konten über das Kundenprofil zu verknüpfen.",
             "buttonSave": "Speichern",
