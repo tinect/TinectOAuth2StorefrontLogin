@@ -15,6 +15,9 @@
         "disconnect": {
             "success": "Compte déconnecté avec succès de %provider%."
         },
+        "resetPassword": {
+            "useOAuth": "Votre compte n'utilise pas de mot de passe pour se connecter. Veuillez utiliser le bouton ci-dessous pour accéder à votre compte."
+        },
         "error": {
             "clientNotFound": "Ce fournisseur de connexion n'est pas disponible.",
             "providerNotConfigured": "Ce fournisseur de connexion n'est pas configuré correctement. Veuillez contacter le support.",

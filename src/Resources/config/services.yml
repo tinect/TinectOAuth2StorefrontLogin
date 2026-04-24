@@ -5,6 +5,7 @@ services:
         bind:
             Symfony\Contracts\HttpClient\HttpClientInterface $httpClient: '@http_client'
             Shopware\Core\Framework\DataAbstractionLayer\EntityRepository $clientsRepository: '@tinect_oauth_storefront_client.repository'
+            Shopware\Core\Framework\DataAbstractionLayer\EntityRepository $customerRepository: '@customer.repository'
             Shopware\Core\Checkout\Customer\SalesChannel\AbstractRegisterRoute $registerRoute: '@Shopware\Core\Checkout\Customer\SalesChannel\RegisterRoute'
             Doctrine\DBAL\Connection $connection: '@Doctrine\DBAL\Connection'
 

@@ -22,6 +22,7 @@ final class OAuthTwigExtension extends AbstractExtension
         return [
             new TwigFunction('tinect_oauth_clients', [$this, 'getClients']),
             new TwigFunction('tinect_oauth_connected_clients', [$this, 'getConnectedClients']),
+            new TwigFunction('tinect_oauth_clients_for_recovery_hash', [$this, 'getClientsForRecoveryHash']),
         ];
     }
 
@@ -46,6 +47,23 @@ final class OAuthTwigExtension extends AbstractExtension
         }
 
         return $result;
+    }
+
+    /**
+     * @return array<array{id: string, name: string, provider: string}>
+     */
+    public function getClientsForRecoveryHash(string $hash): array
+    {
+        return $this->connection->fetchAllAssociative(
+            'SELECT LOWER(HEX(cl.id)) as id, cl.name, cl.provider
+             FROM customer_recovery cr
+             INNER JOIN tinect_oauth_storefront_customer_key k ON k.customer_id = cr.customer_id
+             INNER JOIN tinect_oauth_storefront_client cl ON cl.id = k.client_id
+             WHERE cr.hash = :hash
+               AND cl.disable_password_login = 1
+               AND cl.active = 1',
+            ['hash' => $hash],
+        );
     }
 
     /**

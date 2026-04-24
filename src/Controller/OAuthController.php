@@ -183,7 +183,7 @@ class OAuthController extends StorefrontController
             $user = $this->clientLoader->load($clientId, $context->getContext(), $entity)
                 ->getUser($state, $code, $this->buildRedirectBehaviour($clientId));
 
-            $this->customerResolver->resolve($user, $clientId, $entity->name, $context, allowRegistration: !$entity->connectOnly, trustEmail: $entity->trustEmail, updateEmailOnLogin: $entity->updateEmailOnLogin);
+            $this->customerResolver->resolve($user, $clientId, $entity->name, $context, allowRegistration: !$entity->connectOnly, trustEmail: $entity->trustEmail, updateEmailOnLogin: $entity->updateEmailOnLogin, disablePasswordLogin: $entity->disablePasswordLogin);
         } catch (OAuthException $e) {
             $this->addOAuthFlash($e);
 
@@ -211,7 +211,7 @@ class OAuthController extends StorefrontController
             $user = $this->clientLoader->load($clientId, $context->getContext(), $entity)
                 ->getUser($state, $code, $this->buildRedirectBehaviour($clientId));
 
-            $this->customerResolver->connect($user, $clientId, $context->getCustomer()->getId(), $context, trustEmail: $entity->trustEmail);
+            $this->customerResolver->connect($user, $clientId, $context->getCustomer()->getId(), $context, trustEmail: $entity->trustEmail, disablePasswordLogin: $entity->disablePasswordLogin);
         } catch (OAuthException $e) {
             $this->addOAuthFlash($e);
 

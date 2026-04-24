@@ -15,6 +15,9 @@
         "disconnect": {
             "success": "Verbindung mit %provider% erfolgreich getrennt."
         },
+        "resetPassword": {
+            "useOAuth": "Für Ihr Konto ist keine Passwort-Anmeldung eingerichtet. Bitte nutzen Sie die Schaltfläche unten, um sich anzumelden."
+        },
         "error": {
             "clientNotFound": "Dieser Login-Anbieter ist nicht verfügbar.",
             "providerNotConfigured": "Dieser Login-Anbieter ist nicht korrekt konfiguriert. Bitte den Support kontaktieren.",

@@ -15,6 +15,9 @@
         "disconnect": {
             "success": "Account succesvol ontkoppeld van %provider%."
         },
+        "resetPassword": {
+            "useOAuth": "Uw account gebruikt geen wachtwoord om in te loggen. Gebruik de knop hieronder om toegang te krijgen tot uw account."
+        },
         "error": {
             "clientNotFound": "Deze inlogprovider is niet beschikbaar.",
             "providerNotConfigured": "Deze inlogprovider is niet correct geconfigureerd. Neem contact op met de klantenservice.",

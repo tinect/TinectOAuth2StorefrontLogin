@@ -8,6 +8,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractRegisterRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
 use Shopware\Core\Defaults;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\Util\Random;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\DataBag;
@@ -36,10 +37,11 @@ final readonly class CustomerResolver
         private AbstractRegisterRoute $registerRoute,
         private RequestStack $requestStack,
         private EventDispatcherInterface $eventDispatcher,
+        private EntityRepository $customerRepository,
     ) {
     }
 
-    public function resolve(User $user, string $clientId, string $providerName, SalesChannelContext $context, bool $allowRegistration = true, bool $trustEmail = false, bool $updateEmailOnLogin = false): void
+    public function resolve(User $user, string $clientId, string $providerName, SalesChannelContext $context, bool $allowRegistration = true, bool $trustEmail = false, bool $updateEmailOnLogin = false, bool $disablePasswordLogin = false): void
     {
         $context->addState(self::STATE);
 
@@ -75,6 +77,7 @@ final readonly class CustomerResolver
 
         if ($existingCustomerId !== null) {
             $this->storeCustomerKey($existingCustomerId, $clientId, $user->primaryKey);
+            $this->randomizePasswordIfNeeded($existingCustomerId, $disablePasswordLogin, $context);
             $this->accountService->loginById($existingCustomerId, $context);
 
             return;
@@ -92,7 +95,7 @@ final readonly class CustomerResolver
         $this->eventDispatcher->dispatch(new OAuthCustomerRegisteredEvent($newCustomerId, $clientId, $user, $context));
     }
 
-    public function connect(User $user, string $clientId, string $customerId, SalesChannelContext $context, bool $trustEmail = false): void
+    public function connect(User $user, string $clientId, string $customerId, SalesChannelContext $context, bool $trustEmail = false, bool $disablePasswordLogin = false): void
     {
         if ($trustEmail) {
             $customerEmail = strtolower(trim($context->getCustomer()?->getEmail() ?? ''));
@@ -111,6 +114,7 @@ final readonly class CustomerResolver
         }
 
         $this->storeCustomerKey($customerId, $clientId, $user->primaryKey);
+        $this->randomizePasswordIfNeeded($customerId, $disablePasswordLogin, $context);
 
         $this->eventDispatcher->dispatch(new OAuthCustomerConnectedEvent($customerId, $clientId, $user, $context));
     }
@@ -253,6 +257,18 @@ final readonly class CustomerResolver
 
         $this->eventDispatcher->dispatch(
             new OAuthCustomerEmailUpdatedEvent($customerId, $clientId, $oldEmail, $newEmail, $context)
+        );
+    }
+
+    private function randomizePasswordIfNeeded(string $customerId, bool $disablePasswordLogin, SalesChannelContext $context): void
+    {
+        if (!$disablePasswordLogin) {
+            return;
+        }
+
+        $this->customerRepository->update(
+            [['id' => $customerId, 'password' => Random::getString(32)]],
+            $context->getContext(),
         );
     }
 

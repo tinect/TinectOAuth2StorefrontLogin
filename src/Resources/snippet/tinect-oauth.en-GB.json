@@ -15,6 +15,9 @@
         "disconnect": {
             "success": "Account disconnected successfully from %provider%."
         },
+        "resetPassword": {
+            "useOAuth": "Your account does not use a password for signing in. Please use the button below to access your account."
+        },
         "error": {
             "clientNotFound": "This login provider is not available.",
             "providerNotConfigured": "This login provider is not configured correctly. Please contact support.",
