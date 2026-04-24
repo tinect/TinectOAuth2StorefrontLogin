@@ -50,11 +50,11 @@ final readonly class CustomerResolver
         //    match the customer the key is mapped to.
         $customerId = null;
         if ($trustEmail) {
-            $customerId = $this->findCustomerIdByKeyAndEmail($clientId, $user->primaryKey, $user->emails, $context->getSalesChannelId());
+            $customerId = $this->findActiveCustomerIdByKeyAndEmail($clientId, $user->primaryKey, $user->emails, $context->getSalesChannelId());
         }
 
         if ($customerId === null) {
-            $customerId = $this->findCustomerIdByKey($clientId, $user->primaryKey);
+            $customerId = $this->findActiveCustomerIdByKey($clientId, $user->primaryKey, $context->getSalesChannelId());
 
             if ($customerId !== null && $trustEmail) {
                 // If we found a customer just by key but trustEmail is enabled, we need to throw mismatch exception
@@ -73,7 +73,7 @@ final readonly class CustomerResolver
         }
 
         // 2. Existing customer with matching email → link and login
-        $existingCustomerId = $this->findCustomerIdByEmail($user->emails, $context->getSalesChannelId());
+        $existingCustomerId = $this->findActiveCustomerIdByEmail($user->emails, $context->getSalesChannelId());
 
         if ($existingCustomerId !== null) {
             $this->storeCustomerKey($existingCustomerId, $clientId, $user->primaryKey);
@@ -136,7 +136,7 @@ final readonly class CustomerResolver
     /**
      * @param string[] $emails
      */
-    private function findCustomerIdByKeyAndEmail(string $clientId, string $primaryKey, array $emails, string $salesChannelId): ?string
+    private function findActiveCustomerIdByKeyAndEmail(string $clientId, string $primaryKey, array $emails, string $salesChannelId): ?string
     {
         if ($primaryKey === '') {
             return null;
@@ -159,6 +159,7 @@ final readonly class CustomerResolver
                AND k.primary_key = :primaryKey
                AND LOWER(c.email) IN (:emails)
                AND (c.sales_channel_id = :salesChannelId OR c.sales_channel_id IS NULL)
+               AND c.active = 1
                AND c.guest = 0',
             [
                 'clientId' => Uuid::fromHexToBytes($clientId),
@@ -168,6 +169,31 @@ final readonly class CustomerResolver
             ],
             [
                 'emails' => ArrayParameterType::STRING,
+            ],
+        );
+
+        return $result ?: null;
+    }
+
+    private function findActiveCustomerIdByKey(string $clientId, string $primaryKey, string $salesChannelId): ?string
+    {
+        if ($primaryKey === '') {
+            return null;
+        }
+
+        $result = $this->connection->fetchOne(
+            'SELECT LOWER(HEX(k.customer_id))
+                 FROM tinect_oauth_storefront_customer_key k
+                 INNER JOIN customer c ON c.id = k.customer_id
+                 WHERE k.client_id = :clientId
+                   AND k.primary_key = :primaryKey
+                   AND (c.sales_channel_id = :salesChannelId OR c.sales_channel_id IS NULL)
+                   AND c.active = 1
+                   AND c.guest = 0',
+            [
+                'clientId' => Uuid::fromHexToBytes($clientId),
+                'primaryKey' => $primaryKey,
+                'salesChannelId' => Uuid::fromHexToBytes($salesChannelId),
             ],
         );
 
@@ -197,7 +223,7 @@ final readonly class CustomerResolver
     /**
      * @param string[] $emails
      */
-    private function findCustomerIdByEmail(array $emails, string $salesChannelId): ?string
+    private function findActiveCustomerIdByEmail(array $emails, string $salesChannelId): ?string
     {
         $emails = array_values(array_unique(array_map(
             static fn (string $e) => strtolower(trim($e)),
@@ -213,6 +239,7 @@ final readonly class CustomerResolver
              FROM customer
              WHERE LOWER(email) IN (:emails)
                AND (sales_channel_id = :salesChannelId OR sales_channel_id IS NULL)
+               AND active = 1
                AND guest = 0
                ORDER BY sales_channel_id DESC',
             [
