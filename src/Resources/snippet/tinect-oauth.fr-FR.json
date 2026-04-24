@@ -22,7 +22,6 @@
             "providerError": "Le fournisseur de connexion a renvoyé une erreur : %error%",
             "missingCode": "La connexion a échoué. Veuillez réessayer.",
             "loginFailed": "La connexion a échoué. Veuillez réessayer ou utiliser une autre méthode de connexion. Si le problème persiste, n'hésitez pas à contacter notre service d'assistance.",
-            "passwordLoginDisabled": "La connexion par mot de passe n'est pas disponible pour votre compte. Veuillez vous connecter via votre fournisseur d'identité associé.",
             "noAccountFound": "Aucun compte correspondant à votre connexion %provider% n’a été trouvé. Veuillez d’abord vous inscrire pour continuer.",
             "accountAlreadyConnected": "Ce compte fournisseur est déjà lié à un autre client.",
             "loginRequired": "Veuillez vous connecter avant d'associer un compte.",

@@ -22,7 +22,6 @@
             "providerError": "Der Login-Anbieter hat einen Fehler zurückgegeben: %error%",
             "missingCode": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
             "loginFailed": "Die Anmeldung ist leider fehlgeschlagen. Bitte versuchen Sie es erneut oder nutzen Sie eine andere Anmeldemethode. Falls das Problem weiterhin besteht, wenden Sie sich bitte an unseren Support.",
-            "passwordLoginDisabled": "Die Anmeldung per Passwort ist für Ihr Konto nicht möglich. Bitte melden Sie sich über Ihren verknüpften Anbieter an.",
             "noAccountFound": "Es konnte bei uns kein passender Account zu Ihrem %provider%-Login gefunden werden. Bitte registrieren Sie sich zuerst, um fortzufahren.",
             "accountAlreadyConnected": "Dieses Anbieter-Konto ist bereits mit einem anderen Kundenkonto verknüpft.",
             "loginRequired": "Bitte melden Sie sich zuerst an, bevor Sie ein Konto verknüpfen.",

@@ -3,24 +3,16 @@
 namespace Tinect\OAuth2StorefrontLogin\Subscriber;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Core\Checkout\Customer\CustomerException;
 use Shopware\Core\Checkout\Customer\Event\CustomerBeforeLoginEvent;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Tinect\OAuth2StorefrontLogin\Exception\OAuthPasswordLoginDisabledException;
 use Tinect\OAuth2StorefrontLogin\Service\CustomerResolver;
 
 final readonly class PasswordLoginSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private Connection $connection,
-        private TranslatorInterface $translator,
-        private RouterInterface $router,
     ) {
     }
 
@@ -28,7 +20,6 @@ final readonly class PasswordLoginSubscriber implements EventSubscriberInterface
     {
         return [
             CustomerBeforeLoginEvent::class => 'onBeforeLogin',
-            KernelEvents::EXCEPTION => ['onKernelException', 100],
         ];
     }
 
@@ -58,32 +49,7 @@ final readonly class PasswordLoginSubscriber implements EventSubscriberInterface
         );
 
         if ($result !== false) {
-            throw new OAuthPasswordLoginDisabledException();
+            throw CustomerException::badCredentials();
         }
-    }
-
-    public function onKernelException(ExceptionEvent $event): void
-    {
-        $throwable = $event->getThrowable();
-
-        if (!$throwable instanceof OAuthPasswordLoginDisabledException) {
-            return;
-        }
-
-        $request = $event->getRequest();
-
-        $session = $request->hasSession() ? $request->getSession() : null;
-        if ($session instanceof FlashBagAwareSessionInterface) {
-            $session->getFlashBag()->add(
-                'danger',
-                $this->translator->trans('tinect-oauth.error.passwordLoginDisabled'),
-            );
-        }
-
-        $event->setResponse(new RedirectResponse(
-            $this->router->generate('frontend.account.login.page'),
-        ));
-
-        $event->stopPropagation();
     }
 }
