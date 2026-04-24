@@ -10,7 +10,10 @@
             "disconnect": "Verbindung trennen",
             "statusConnected": "Verbunden",
             "statusNotConnected": "Nicht verbunden",
-            "success": "Konto erfolgreich mit %provider% verbunden."
+            "success": "Konto erfolgreich mit %provider% verbunden.",
+            "disconnectConfirmTitle": "Verbindung trennen",
+            "disconnectConfirmText": "Möchten Sie %provider% wirklich von Ihrem Konto trennen?",
+            "disconnectConfirmCancel": "Abbrechen"
         },
         "disconnect": {
             "success": "Verbindung mit %provider% erfolgreich getrennt."

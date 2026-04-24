@@ -10,7 +10,10 @@
             "disconnect": "Ontkoppelen",
             "statusConnected": "Gekoppeld",
             "statusNotConnected": "Niet gekoppeld",
-            "success": "Account succesvol gekoppeld met %provider%."
+            "success": "Account succesvol gekoppeld met %provider%.",
+            "disconnectConfirmTitle": "Account ontkoppelen",
+            "disconnectConfirmText": "Weet u zeker dat u %provider% van uw account wilt ontkoppelen?",
+            "disconnectConfirmCancel": "Annuleren"
         },
         "disconnect": {
             "success": "Account succesvol ontkoppeld van %provider%."

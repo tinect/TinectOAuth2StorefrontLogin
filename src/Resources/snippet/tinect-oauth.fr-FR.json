@@ -10,7 +10,10 @@
             "disconnect": "Déconnecter",
             "statusConnected": "Connecté",
             "statusNotConnected": "Non connecté",
-            "success": "Compte connecté avec succès à %provider%."
+            "success": "Compte connecté avec succès à %provider%.",
+            "disconnectConfirmTitle": "Déconnecter le compte",
+            "disconnectConfirmText": "Voulez-vous vraiment déconnecter %provider% de votre compte ?",
+            "disconnectConfirmCancel": "Annuler"
         },
         "disconnect": {
             "success": "Compte déconnecté avec succès de %provider%."

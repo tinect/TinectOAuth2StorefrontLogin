@@ -25,11 +25,42 @@
                                             <span class="badge bg-success mb-2">
                                                 {{ 'tinect-oauth.connect.statusConnected'|trans|sw_sanitize }}
                                             </span>
-                                            <form action="{{ path('widgets.tinect.oauth.disconnect', { clientId: client.id }) }}" method="post">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                                    {{ 'tinect-oauth.connect.disconnect'|trans|sw_sanitize }}
-                                                </button>
-                                            </form>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-danger w-100"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#tinect-oauth-disconnect-modal-{{ client.id|escape('html_attr') }}">
+                                                {{ 'tinect-oauth.connect.disconnect'|trans|sw_sanitize }}
+                                            </button>
+
+                                            <div class="modal fade"
+                                                 id="tinect-oauth-disconnect-modal-{{ client.id|escape('html_attr') }}"
+                                                 tabindex="-1"
+                                                 aria-modal="true"
+                                                 role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">
+                                                                {{ 'tinect-oauth.connect.disconnectConfirmTitle'|trans|sw_sanitize }}
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {{ 'tinect-oauth.connect.disconnectConfirmText'|trans({ '%provider%': client.name })|sw_sanitize }}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                {{ 'tinect-oauth.connect.disconnectConfirmCancel'|trans|sw_sanitize }}
+                                                            </button>
+                                                            <form action="{{ path('widgets.tinect.oauth.disconnect', { clientId: client.id }) }}" method="post">
+                                                                <button type="submit" class="btn btn-danger">
+                                                                    {{ 'tinect-oauth.connect.disconnect'|trans|sw_sanitize }}
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         {% else %}
                                             <span class="badge bg-secondary mb-2">
                                                 {{ 'tinect-oauth.connect.statusNotConnected'|trans|sw_sanitize }}
