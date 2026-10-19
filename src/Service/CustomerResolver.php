@@ -5,10 +5,14 @@ namespace Tinect\OAuth2StorefrontLogin\Service;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Shopware\Core\Checkout\Customer\CustomerEntity;
+use Shopware\Core\Checkout\Customer\CustomerCollection;
+use Shopware\Core\Checkout\Customer\Event\CustomerRegisterEvent;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractRegisterRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Util\Random;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\DataBag;
@@ -29,11 +33,14 @@ use Tinect\OAuth2StorefrontLogin\Exception\OAuthAccountAlreadyConnectedException
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailMismatchException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthEnforcedProviderException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthNoAccountFoundException;
+use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailConfirmationRequiredException;
 
 final readonly class CustomerResolver
 {
     public const STATE = 'oauth2_storefront_login_resolving_customer';
+    public const STATE_VERIFIED_EMAIL = 'oauth2_storefront_login_verified_email';
 
+    /** @param EntityRepository<CustomerCollection> $customerRepository */
     public function __construct(
         private Connection $connection,
         private AccountService $accountService,
@@ -71,12 +78,12 @@ final readonly class CustomerResolver
         if ($customerId !== null) {
             $enforced = $this->assertClientAllowedForCustomer($clientId, $customerId);
 
-            if ($updateEmailOnLogin && $user->primaryEmail !== '') {
+            if ($updateEmailOnLogin && $user->isEmailVerified($user->primaryEmail)) {
                 $this->updateCustomerEmail($customerId, $clientId, $user->primaryEmail, $context);
             }
 
             $this->randomizePasswordIfNeeded($customerId, $enforced, $context);
-            $this->accountService->loginById($customerId, $context);
+            $this->loginCustomer($customerId, $context);
 
             return;
         }
@@ -85,7 +92,7 @@ final readonly class CustomerResolver
         $this->eventDispatcher->dispatch($resolution);
 
         // 2. Existing customer with matching email → link and login
-        $existingCustomerId = $this->findActiveCustomerIdByEmail($user->emails, $context->getSalesChannelId());
+        $existingCustomerId = $this->findActiveCustomerIdByEmail($user->verifiedEmails, $context->getSalesChannelId());
 
         if ($existingCustomerId !== null) {
             $enforced = $this->assertClientAllowedForCustomer($clientId, $existingCustomerId);
@@ -96,7 +103,7 @@ final readonly class CustomerResolver
 
             $this->storeCustomerKey($existingCustomerId, $clientId, $user->primaryKey);
             $this->randomizePasswordIfNeeded($existingCustomerId, $disablePasswordLogin || $enforced, $context);
-            $this->accountService->loginById($existingCustomerId, $context);
+            $this->loginCustomer($existingCustomerId, $context);
 
             return;
         }
@@ -108,7 +115,7 @@ final readonly class CustomerResolver
 
         $newCustomerId = $this->registerNewCustomer($user, $context);
         $this->storeCustomerKey($newCustomerId, $clientId, $user->primaryKey);
-        $this->accountService->loginById($newCustomerId, $context);
+        $this->loginCustomer($newCustomerId, $context);
 
         $this->eventDispatcher->dispatch(new OAuthCustomerRegisteredEvent($newCustomerId, $clientId, $user, $context));
     }
@@ -375,6 +382,21 @@ final readonly class CustomerResolver
         );
     }
 
+    private function loginCustomer(string $customerId, SalesChannelContext $context): void
+    {
+        // loginById deliberately bypasses Shopware's password and double-opt-in checks.
+        $customer = $this->customerRepository->search(new Criteria([$customerId]), $context->getContext())->getEntities()->first();
+        if (!$customer instanceof CustomerEntity) {
+            throw new \RuntimeException('The resolved customer could not be loaded.');
+        }
+
+        if ($customer->getDoubleOptInRegistration() && $customer->getDoubleOptInConfirmDate() === null) {
+            throw new OAuthEmailConfirmationRequiredException();
+        }
+
+        $this->accountService->loginById($customerId, $context);
+    }
+
     private function registerNewCustomer(User $user, SalesChannelContext $context): string
     {
         $firstName = $user->firstName ?: 'OAuth';
@@ -402,8 +424,22 @@ final readonly class CustomerResolver
             'storefrontUrl' => $storefrontUrl,
         ]);
 
-        $response = $this->registerRoute->register($data, $context, false);
+        if ($user->isEmailVerified($data->getString('email'))) {
+            $context->addState(self::STATE_VERIFIED_EMAIL);
+        }
 
-        return $response->getCustomer()->getId();
+        try {
+            $response = $this->registerRoute->register($data, $context, false);
+        } finally {
+            $context->removeState(self::STATE_VERIFIED_EMAIL);
+        }
+
+        $customer = $response->getCustomer();
+        if ($customer->getDoubleOptInRegistration() && $customer->getDoubleOptInConfirmDate() !== null) {
+            // RegisterRoute returns early for double opt-in, even when verification was supplied by the identity service.
+            $this->eventDispatcher->dispatch(new CustomerRegisterEvent($context, $customer));
+        }
+
+        return $customer->getId();
     }
 }

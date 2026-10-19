@@ -213,3 +213,9 @@ When the plugin automatically creates a new customer account, it sets `acceptedD
 ## License
 
 MIT
+
+### Verified email addresses
+
+`User::verifiedEmails` contains only addresses explicitly verified by the identity service. OIDC clients require the boolean `email_verified` claim; GitHub always checks its email endpoint, including when the public profile contains an email. Custom clients must populate this list themselves. Missing or false verification never counts as verified.
+
+Automatic email-based linking and email updates use verified addresses only. Existing key mappings remain scoped to the configured client. When Shopware requires double opt-in, a verified primary email confirms a newly registered customer without sending a confirmation email. Otherwise the normal confirmation email is sent and login is refused until the customer confirms it. Existing unconfirmed customers also cannot bypass double opt-in through a linked identity.

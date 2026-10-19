@@ -45,6 +45,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['provider@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $customer = $this->createStub(CustomerEntity::class);
         $customer->method('getEmail')->willReturn('shop@example.com');
@@ -64,6 +65,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['provider@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $context = $this->createStub(SalesChannelContext::class);
         $context->method('getCustomer')->willReturn(null);
@@ -80,6 +82,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['John@Example.com']; // mixed case to test normalisation
+        $user->verifiedEmails = $user->emails;
 
         $customer = $this->createStub(CustomerEntity::class);
         $customer->method('getEmail')->willReturn('john@example.com');
@@ -196,6 +199,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['user@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $connection = $this->createStub(Connection::class);
         $connection->method('fetchOne')->willReturn(false); // no key match, no email match
@@ -215,6 +219,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['user@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $existingCustomerId = Uuid::randomHex();
 
@@ -239,6 +244,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['user@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $existingCustomerId = Uuid::randomHex();
 
@@ -267,10 +273,11 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['user@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $existingCustomerId = Uuid::randomHex();
 
-        $connection = $this->createMock(Connection::class);
+        $connection = $this->createStub(Connection::class);
         $connection->method('fetchOne')->willReturn($existingCustomerId); // findCustomerIdByKeyAndEmail
 
         $accountService = $this->createMock(AccountService::class);
@@ -291,6 +298,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['user@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $existingCustomerId = Uuid::randomHex();
 
@@ -315,6 +323,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['user@example.com'];
+        $user->verifiedEmails = $user->emails;
 
         $existingCustomerId = Uuid::randomHex();
 
@@ -344,6 +353,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'key-123';
         $user->emails = ['new@example.com'];
+        $user->verifiedEmails = $user->emails;
         $user->primaryEmail = 'new@example.com';
 
         $existingCustomerId = Uuid::randomHex();
@@ -384,6 +394,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = 'new-key';
         $user->emails = ['customer@example.com'];
+        $user->verifiedEmails = $user->emails;
         $connection = $this->createMock(Connection::class);
         $connection->method('fetchOne')->willReturnOnConsecutiveCalls(false, $this->customerId);
         $connection->expects(self::never())->method('executeStatement');
@@ -401,6 +412,45 @@ final class CustomerResolverTest extends TestCase
         $resolver = $this->makeResolver(connection: $connection, accountService: $accountService, eventDispatcher: $dispatcher);
         $this->expectException(\Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailAlreadyRegisteredException::class);
         $resolver->resolve($user, $this->clientId, 'Google', $context);
+    }
+
+    public function testLinkedIdentityCannotLoginBeforeShopwareEmailConfirmation(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'linked-key';
+        $connection = $this->createStub(Connection::class);
+        $connection->method('fetchOne')->willReturn($this->customerId);
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects(self::never())->method('loginById');
+        $customer = new CustomerEntity();
+        $customer->setId($this->customerId);
+        $customer->setDoubleOptInRegistration(true);
+        $result = $this->createStub(\Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult::class);
+        $result->method('getEntities')->willReturn(new \Shopware\Core\Checkout\Customer\CustomerCollection([$customer]));
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('search')->willReturn($result);
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+        $resolver = $this->makeResolver(connection: $connection, accountService: $accountService, customerRepository: $repository);
+        $this->expectException(\Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailConfirmationRequiredException::class);
+        $resolver->resolve($user, $this->clientId, 'Google', $context);
+    }
+
+    public function testUnverifiedEmailCannotAutomaticallyLinkAnExistingCustomer(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'new-key';
+        $user->emails = ['customer@example.com'];
+        $connection = $this->createMock(Connection::class);
+        $connection->expects(self::once())->method('fetchOne')->willReturn(false);
+        $connection->expects(self::never())->method('executeStatement');
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects(self::never())->method('loginById');
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+        $resolver = $this->makeResolver(connection: $connection, accountService: $accountService);
+        $this->expectException(OAuthNoAccountFoundException::class);
+        $resolver->resolve($user, $this->clientId, 'Google', $context, allowRegistration: false);
     }
 
     public static function salesChannelScenarios(): iterable
@@ -440,6 +490,7 @@ final class CustomerResolverTest extends TestCase
         $user = new User();
         $user->primaryKey = $emailOnly ? '' : 'subject';
         $user->emails = $otherClient ? [] : [$changedEmail ? 'changed@example.com' : 'customer@example.com'];
+        $user->verifiedEmails = $user->emails;
         $context = $this->createStub(SalesChannelContext::class);
         $context->method('getSalesChannelId')->willReturn($sameChannel ? $creationChannelId : Uuid::randomHex());
         $accountService = $this->createMock(AccountService::class);
@@ -616,13 +667,22 @@ final class CustomerResolverTest extends TestCase
         ?EnforcedEmailDomainService $enforcedEmailDomains = null,
         ?EntityRepository $customerRepository = null,
     ): CustomerResolver {
+        $customer = new CustomerEntity();
+        $customer->setId($this->customerId);
+        $customer->setDoubleOptInRegistration(false);
+        $result = $this->createStub(\Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult::class);
+        $result->method('getEntities')->willReturn(new \Shopware\Core\Checkout\Customer\CustomerCollection([$customer]));
+        $repository = $customerRepository ?? $this->createStub(EntityRepository::class);
+        if ($customerRepository === null) {
+            $repository->method('search')->willReturn($result);
+        }
         return new CustomerResolver(
             $connection ?? $this->createStub(Connection::class),
             $accountService ?? $this->createStub(AccountService::class),
             $this->createStub(AbstractRegisterRoute::class),
             $this->createStub(RequestStack::class),
             $eventDispatcher ?? $this->createStub(EventDispatcherInterface::class),
-            $customerRepository ?? $this->createStub(EntityRepository::class),
+            $repository,
             $enforcedEmailDomains ?? new EnforcedEmailDomainService($this->createStub(Connection::class)),
         );
     }

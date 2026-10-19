@@ -82,6 +82,7 @@ final class OpenIdConnectClient extends ClientContract
         $user->primaryKey = (string) $sub;
         $user->primaryEmail = $email;
         $user->emails = [$email];
+        $user->verifiedEmails = ($userInfo['email_verified'] ?? false) === true ? [$user->primaryEmail] : [];
         $user->firstName = $userInfo['given_name'] ?? ($nameParts[0] ?: 'OIDC');
         $user->lastName = $userInfo['family_name'] ?? ($nameParts[1] ?? 'User');
 

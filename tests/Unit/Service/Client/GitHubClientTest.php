@@ -65,7 +65,7 @@ final class GitHubClientTest extends TestCase
         ]);
 
         $httpClient = $this->createStub(HttpClientInterface::class);
-        $httpClient->method('request')->willReturnOnConsecutiveCalls($tokenResponse, $userResponse);
+        $httpClient->method('request')->willReturnOnConsecutiveCalls($tokenResponse, $userResponse, $this->mockResponse([['email' => 'jane@example.com', 'primary' => true, 'verified' => true]]));
 
         $client = new GitHubClient(['clientId' => 'id', 'clientSecret' => 'secret'], $httpClient);
         $user = $client->getUser('state', 'code123', new RedirectBehaviour());
@@ -73,6 +73,7 @@ final class GitHubClientTest extends TestCase
         self::assertSame('42', $user->primaryKey);
         self::assertSame('jane@example.com', $user->primaryEmail);
         self::assertSame(['jane@example.com'], $user->emails);
+        self::assertTrue($user->isEmailVerified('JANE@example.com'));
         self::assertSame('Jane', $user->firstName);
         self::assertSame('Doe', $user->lastName);
     }

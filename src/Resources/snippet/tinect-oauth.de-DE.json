@@ -22,6 +22,7 @@
             "useOAuth": "Für Ihr Konto ist keine Passwort-Anmeldung eingerichtet. Bitte nutzen Sie die Schaltfläche unten, um sich anzumelden."
         },
         "error": {
+            "emailConfirmationRequired": "Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrem Posteingang und melden Sie sich anschließend erneut an.",
             "emailAlreadyRegistered": "Sie haben bereits ein Konto mit dieser E-Mail-Adresse. Bitte melden Sie sich mit Ihrem Passwort an und verknüpfen Sie Ihr Konto in Ihrem Profil.",
             "clientNotFound": "Dieser Login-Anbieter ist nicht verfügbar.",
             "providerNotConfigured": "Dieser Login-Anbieter ist nicht korrekt konfiguriert. Bitte den Support kontaktieren.",

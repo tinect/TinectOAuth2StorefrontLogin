@@ -77,6 +77,7 @@ final class MicrosoftEntraClient extends ClientContract
         $user->primaryKey = (string) $userInfo['sub'];
         $user->primaryEmail = $emails[0];
         $user->emails = $emails;
+        $user->verifiedEmails = ($userInfo['email_verified'] ?? false) === true ? [$user->primaryEmail] : [];
         $user->firstName = $userInfo['given_name'] ?? ($nameParts[0] ?: 'Entra');
         $user->lastName = $userInfo['family_name'] ?? ($nameParts[1] ?? 'User');
 

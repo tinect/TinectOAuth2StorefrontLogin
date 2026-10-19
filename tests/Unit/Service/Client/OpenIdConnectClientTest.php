@@ -166,6 +166,27 @@ final class OpenIdConnectClientTest extends TestCase
         $client->getUser('state', 'code', new RedirectBehaviour());
     }
 
+    public static function verificationClaims(): iterable
+    {
+        yield 'verified' => [true, true];
+        yield 'unverified' => [false, false];
+        yield 'missing' => [null, false];
+        yield 'string is not a boolean claim' => ['false', false];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('verificationClaims')]
+    public function testOnlyExplicitBooleanVerificationIsTrusted(mixed $claim, bool $verified): void
+    {
+        $httpClient = $this->createStub(HttpClientInterface::class);
+        $httpClient->method('request')->willReturnOnConsecutiveCalls(
+            $this->mockResponse(['access_token' => 'token']),
+            $this->mockResponse(['sub' => 'subject', 'email' => 'customer@example.com', 'email_verified' => $claim]),
+        );
+        $client = new OpenIdConnectClient(['clientId' => 'id', 'clientSecret' => 'secret', 'token_endpoint' => 'https://example.com/token', 'userinfo_endpoint' => 'https://example.com/userinfo'], $httpClient);
+        $user = $client->getUser('state', 'code', new RedirectBehaviour());
+        self::assertSame($verified, $user->isEmailVerified('CUSTOMER@example.com'));
+    }
+
     private function mockResponse(array $data): ResponseInterface
     {
         $response = $this->createStub(ResponseInterface::class);

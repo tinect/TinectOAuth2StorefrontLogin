@@ -67,22 +67,20 @@ final class GitHubClient extends ClientContract
         ]);
 
         $userData = $userResponse->toArray();
-        $email = $userData['email'] ?? null;
+        // A public profile email alone does not establish verification.
+        $email = null;
+        $emailsResponse = $this->httpClient->request('GET', 'https://api.github.com/user/emails', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Accept' => 'application/vnd.github.v3+json',
+                'User-Agent' => 'Shopware-TinectOAuth-Plugin',
+            ],
+        ]);
 
-        if (empty($email)) {
-            $emailsResponse = $this->httpClient->request('GET', 'https://api.github.com/user/emails', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $accessToken,
-                    'Accept' => 'application/vnd.github.v3+json',
-                    'User-Agent' => 'Shopware-TinectOAuth-Plugin',
-                ],
-            ]);
-
-            foreach ($emailsResponse->toArray() as $emailEntry) {
-                if (($emailEntry['primary'] ?? false) === true && ($emailEntry['verified'] ?? false) === true) {
-                    $email = $emailEntry['email'];
-                    break;
-                }
+        foreach ($emailsResponse->toArray() as $emailEntry) {
+            if (($emailEntry['primary'] ?? false) === true && ($emailEntry['verified'] ?? false) === true) {
+                $email = $emailEntry['email'];
+                break;
             }
         }
 
@@ -97,6 +95,7 @@ final class GitHubClient extends ClientContract
         $user->primaryKey = (string) ($userData['id'] ?? '');
         $user->primaryEmail = $email;
         $user->emails = [$email];
+        $user->verifiedEmails = [$email];
         $user->firstName = $nameParts[0] ?: 'GitHub';
         $user->lastName = $nameParts[1] ?? 'User';
 

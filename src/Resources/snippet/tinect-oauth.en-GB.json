@@ -22,6 +22,7 @@
             "useOAuth": "Your account does not use a password for signing in. Please use the button below to access your account."
         },
         "error": {
+            "emailConfirmationRequired": "Please confirm your email address using the link in your inbox, then sign in again.",
             "emailAlreadyRegistered": "You already have an account with this email address. Please sign in with your password and connect your account in your profile.",
             "clientNotFound": "This login provider is not available.",
             "providerNotConfigured": "This login provider is not configured correctly. Please contact support.",
