@@ -157,6 +157,8 @@ The plugin dispatches the following events that you can subscribe to:
 | `OAuthCustomerEmailUpdatedEvent` | A customer's email was updated on login (requires **Update email address on every login**) |
 | `OAuthCustomerEmailUpdateConflictEvent` | Email update was skipped because the new email is already used by another account |
 
+`OAuthCustomerResolveEvent` runs after lookup of an existing connection and before email-based linking or registration. Subscribers can set `allowEmailLinking = false` to require customers to sign in with their password and connect accounts explicitly. Existing connections still log in normally. The event includes the exact client ID and sales-channel context; it also runs when the login starts in an already authenticated session.
+
 All events are in the `Tinect\OAuth2StorefrontLogin\Event` namespace.
 
 ## Data Protection (GDPR / DSGVO)

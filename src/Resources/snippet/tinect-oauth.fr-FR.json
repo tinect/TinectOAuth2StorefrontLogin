@@ -22,6 +22,7 @@
             "useOAuth": "Votre compte n'utilise pas de mot de passe pour se connecter. Veuillez utiliser le bouton ci-dessous pour accéder à votre compte."
         },
         "error": {
+            "emailAlreadyRegistered": "Vous avez déjà un compte avec cette adresse e-mail. Veuillez vous connecter avec votre mot de passe et associer votre compte dans votre profil.",
             "clientNotFound": "Ce fournisseur de connexion n'est pas disponible.",
             "providerNotConfigured": "Ce fournisseur de connexion n'est pas configuré correctement. Veuillez contacter le support.",
             "invalidState": "Une erreur s'est produite. Veuillez réessayer de vous connecter.",

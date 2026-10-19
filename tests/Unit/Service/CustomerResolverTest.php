@@ -379,6 +379,30 @@ final class CustomerResolverTest extends TestCase
         $resolver->resolve($user, $this->clientId, 'any', $context, updateEmailOnLogin: true);
     }
 
+    public function testEmailLinkingPolicyRejectsExistingAccountsBeforeWritingOrLogin(): void
+    {
+        $user = new User();
+        $user->primaryKey = 'new-key';
+        $user->emails = ['customer@example.com'];
+        $connection = $this->createMock(Connection::class);
+        $connection->method('fetchOne')->willReturnOnConsecutiveCalls(false, $this->customerId);
+        $connection->expects(self::never())->method('executeStatement');
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects(self::never())->method('loginById');
+        $dispatcher = $this->createStub(EventDispatcherInterface::class);
+        $dispatcher->method('dispatch')->willReturnCallback(static function (object $event): object {
+            if ($event instanceof \Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerResolveEvent) {
+                $event->allowEmailLinking = false;
+            }
+            return $event;
+        });
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+        $resolver = $this->makeResolver(connection: $connection, accountService: $accountService, eventDispatcher: $dispatcher);
+        $this->expectException(\Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailAlreadyRegisteredException::class);
+        $resolver->resolve($user, $this->clientId, 'Google', $context);
+    }
+
     public static function salesChannelScenarios(): iterable
     {
         yield 'shared account, key' => [false, false, false, false, true];

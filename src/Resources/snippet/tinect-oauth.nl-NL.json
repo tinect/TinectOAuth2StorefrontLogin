@@ -22,6 +22,7 @@
             "useOAuth": "Uw account gebruikt geen wachtwoord om in te loggen. Gebruik de knop hieronder om toegang te krijgen tot uw account."
         },
         "error": {
+            "emailAlreadyRegistered": "U heeft al een account met dit e-mailadres. Meld u aan met uw wachtwoord en koppel uw account in uw profiel.",
             "clientNotFound": "Deze inlogprovider is niet beschikbaar.",
             "providerNotConfigured": "Deze inlogprovider is niet correct geconfigureerd. Neem contact op met de klantenservice.",
             "invalidState": "Er is iets misgegaan. Probeer opnieuw in te loggen.",

@@ -23,6 +23,8 @@ use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerDisconnectedEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerEmailUpdateConflictEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerEmailUpdatedEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerRegisteredEvent;
+use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerResolveEvent;
+use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailAlreadyRegisteredException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthAccountAlreadyConnectedException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailMismatchException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthEnforcedProviderException;
@@ -79,11 +81,18 @@ final readonly class CustomerResolver
             return;
         }
 
+        $resolution = new OAuthCustomerResolveEvent($user, $clientId, $context);
+        $this->eventDispatcher->dispatch($resolution);
+
         // 2. Existing customer with matching email → link and login
         $existingCustomerId = $this->findActiveCustomerIdByEmail($user->emails, $context->getSalesChannelId());
 
         if ($existingCustomerId !== null) {
             $enforced = $this->assertClientAllowedForCustomer($clientId, $existingCustomerId);
+
+            if (!$resolution->allowEmailLinking) {
+                throw new OAuthEmailAlreadyRegisteredException();
+            }
 
             $this->storeCustomerKey($existingCustomerId, $clientId, $user->primaryKey);
             $this->randomizePasswordIfNeeded($existingCustomerId, $disablePasswordLogin || $enforced, $context);
