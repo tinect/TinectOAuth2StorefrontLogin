@@ -19,6 +19,8 @@
             "buttonCancel": "Abbrechen"
         },
         "edit": {
+            "labelPrompt": "Anmeldeaufforderung",
+            "labelPromptHelp": "Optionale, durch Leerzeichen getrennte Aufforderungen des Anmeldedienstes, zum Beispiel select_account. Ein leeres Feld verwendet das Standardverhalten. Fordern Sie eine Zustimmung nur bei Bedarf an.",
             "title": "OAuth Client bearbeiten",
             "cardTitleBase": "Allgemeine Einstellungen",
             "cardTitleProviderSettings": "Anbieter-Einstellungen",

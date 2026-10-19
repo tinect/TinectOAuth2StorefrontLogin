@@ -32,6 +32,8 @@ final class GoogleMailClientProvider extends ClientProviderContract
             ->required()
             ->allowedTypes('string');
 
+        $resolver->define('prompt')->default('select_account')->allowedTypes('string');
+
         return $resolver;
     }
 
@@ -40,6 +42,7 @@ final class GoogleMailClientProvider extends ClientProviderContract
         return [
             'clientId' => '',
             'clientSecret' => '',
+            'prompt' => 'select_account',
         ];
     }
 
@@ -50,6 +53,7 @@ final class GoogleMailClientProvider extends ClientProviderContract
             ->toArray();
 
         return new OpenIdConnectClient([
+            'prompt' => $resolvedConfig['prompt'],
             'clientId' => $resolvedConfig['clientId'],
             'clientSecret' => $resolvedConfig['clientSecret'],
             'authorization_endpoint' => $discovery['authorization_endpoint'],

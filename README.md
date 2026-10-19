@@ -227,3 +227,7 @@ Subscribe to `OAuthCustomerRegistrationEvent` to modify its server-side `data` b
 After validating and saving the additional data, call `RegistrationCompletionService::complete($customerId, $salesChannelContext)`. It clears the flag and dispatches `CustomerRegisterEvent` with the completed customer, independently of double-opt-in configuration. Repeated completion calls do not redispatch the event. `OAuthCustomerRegisteredEvent` still reports initial account creation; use the core registration event for completed registrations.
 
 A shop enabling deferred completion must gate its own protected operations while `RegistrationCompletionService::isPending($customer)` is true. Page redirects alone do not enforce this: check business operations such as order creation for Store API and AJAX requests too. The plugin does not choose a profile form or its business-specific validation rules.
+
+### Account chooser and consent prompts
+
+Google and generic OIDC settings accept an optional `prompt` string. Google defaults to `select_account` so customers can choose an account; generic OIDC defaults to an empty string. Set an empty string to use the identity service's default, or enter its supported space-separated prompt values. The plugin sends the parameter once and does not force repeated consent. Set `consent` explicitly only when your integration requires reauthorization. Existing Google configurations without the field also use the account chooser.

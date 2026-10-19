@@ -187,6 +187,15 @@ final class OpenIdConnectClientTest extends TestCase
         self::assertSame($verified, $user->isEmailVerified('CUSTOMER@example.com'));
     }
 
+    public function testConfiguredPromptIsSentExactlyOnce(): void
+    {
+        $url = $this->makeClient(['prompt' => 'select_account'])->getLoginUrl(null, new RedirectBehaviour());
+        parse_str(parse_url($url, PHP_URL_QUERY), $params);
+        self::assertSame('select_account', $params['prompt']);
+        self::assertSame(1, substr_count($url, 'prompt='));
+        self::assertStringNotContainsString('prompt=', $this->makeClient(['prompt' => ''])->getLoginUrl(null, new RedirectBehaviour()));
+    }
+
     private function mockResponse(array $data): ResponseInterface
     {
         $response = $this->createStub(ResponseInterface::class);

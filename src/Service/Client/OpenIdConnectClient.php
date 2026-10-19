@@ -26,6 +26,10 @@ final class OpenIdConnectClient extends ClientContract
             'scope' => $scopeString,
         ];
 
+        if (($this->config['prompt'] ?? '') !== '') {
+            $params['prompt'] = $this->config['prompt'];
+        }
+
         if ($behaviour->redirectUri !== null) {
             $params['redirect_uri'] = $behaviour->redirectUri;
         }

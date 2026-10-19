@@ -19,6 +19,8 @@
             "buttonCancel": "Cancel"
         },
         "edit": {
+            "labelPrompt": "Authentication prompt",
+            "labelPromptHelp": "Optional, space-separated prompts supported by the identity service, for example select_account. Leave empty for its default behavior. Only request consent when necessary.",
             "title": "Edit OAuth Client",
             "cardTitleBase": "General Settings",
             "cardTitleProviderSettings": "Provider Settings",

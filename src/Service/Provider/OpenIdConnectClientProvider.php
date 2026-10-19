@@ -52,6 +52,8 @@ final class OpenIdConnectClientProvider extends ClientProviderContract
             ->default(['openid', 'email', 'profile'])
             ->allowedTypes('array');
 
+        $resolver->define('prompt')->default('')->allowedTypes('string');
+
         return $resolver;
     }
 
@@ -60,6 +62,7 @@ final class OpenIdConnectClientProvider extends ClientProviderContract
         return [
             'clientId' => '',
             'clientSecret' => '',
+            'prompt' => '',
             'discoveryDocumentUrl' => '',
             'authorization_endpoint' => '',
             'token_endpoint' => '',

@@ -30,5 +30,11 @@
             :copyable-tooltip="true"
         ></sw-text-field-deprecated>
     </sw-container>
+    <sw-text-field
+        v-model:value="item.config.prompt"
+        :label="$tc('tinect-oauth-storefront-client.edit.labelPrompt')"
+        :help-text="$tc('tinect-oauth-storefront-client.edit.labelPromptHelp')"
+        placeholder="select_account"
+    ></sw-text-field>
 </div>
 {% endblock %}
