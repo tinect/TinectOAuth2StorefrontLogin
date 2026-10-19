@@ -27,6 +27,7 @@ use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerDisconnectedEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerEmailUpdateConflictEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerEmailUpdatedEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerRegisteredEvent;
+use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerRegistrationEvent;
 use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerResolveEvent;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailAlreadyRegisteredException;
 use Tinect\OAuth2StorefrontLogin\Exception\OAuthAccountAlreadyConnectedException;
@@ -38,6 +39,7 @@ use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailConfirmationRequiredExcepti
 final readonly class CustomerResolver
 {
     public const STATE = 'oauth2_storefront_login_resolving_customer';
+    public const STATE_DEFER_COMPLETION = 'oauth2_storefront_login_defer_completion';
     public const STATE_VERIFIED_EMAIL = 'oauth2_storefront_login_verified_email';
 
     /** @param EntityRepository<CustomerCollection> $customerRepository */
@@ -113,7 +115,7 @@ final readonly class CustomerResolver
             throw new OAuthNoAccountFoundException($providerName);
         }
 
-        $newCustomerId = $this->registerNewCustomer($user, $context);
+        $newCustomerId = $this->registerNewCustomer($user, $clientId, $context);
         $this->storeCustomerKey($newCustomerId, $clientId, $user->primaryKey);
         $this->loginCustomer($newCustomerId, $context);
 
@@ -397,7 +399,7 @@ final readonly class CustomerResolver
         $this->accountService->loginById($customerId, $context);
     }
 
-    private function registerNewCustomer(User $user, SalesChannelContext $context): string
+    private function registerNewCustomer(User $user, string $clientId, SalesChannelContext $context): string
     {
         $firstName = $user->firstName ?: 'OAuth';
         $lastName = $user->lastName ?: 'User';
@@ -424,6 +426,12 @@ final readonly class CustomerResolver
             'storefrontUrl' => $storefrontUrl,
         ]);
 
+        $registration = new OAuthCustomerRegistrationEvent($user, $clientId, $data, $context);
+        $this->eventDispatcher->dispatch($registration);
+        if ($registration->deferCompletion) {
+            $context->addState(self::STATE_DEFER_COMPLETION);
+        }
+
         if ($user->isEmailVerified($data->getString('email'))) {
             $context->addState(self::STATE_VERIFIED_EMAIL);
         }
@@ -432,6 +440,7 @@ final readonly class CustomerResolver
             $response = $this->registerRoute->register($data, $context, false);
         } finally {
             $context->removeState(self::STATE_VERIFIED_EMAIL);
+            $context->removeState(self::STATE_DEFER_COMPLETION);
         }
 
         $customer = $response->getCustomer();

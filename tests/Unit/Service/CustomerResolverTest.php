@@ -24,6 +24,21 @@ use Tinect\OAuth2StorefrontLogin\Service\CustomerResolver;
 use Tinect\OAuth2StorefrontLogin\Service\EnforcedEmailDomainService;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Shopware\Core\Checkout\Customer\CustomerCollection;
+use Shopware\Core\Checkout\Customer\CustomerEvents;
+use Shopware\Core\Checkout\Customer\Event\CustomerDoubleOptInRegistrationEvent;
+use Shopware\Core\Checkout\Customer\Event\CustomerRegisterEvent;
+use Shopware\Core\Checkout\Customer\SalesChannel\CustomerResponse;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Shopware\Core\Framework\Event\DataMappingEvent;
+use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
+use Shopware\Core\System\SalesChannel\SalesChannelEntity;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Tinect\OAuth2StorefrontLogin\Event\OAuthCustomerRegistrationEvent;
+use Tinect\OAuth2StorefrontLogin\Exception\OAuthEmailConfirmationRequiredException;
+use Tinect\OAuth2StorefrontLogin\Service\RegistrationCompletionService;
+use Tinect\OAuth2StorefrontLogin\Subscriber\OAuthRegistrationSubscriber;
 
 final class CustomerResolverTest extends TestCase
 {
@@ -504,6 +519,97 @@ final class CustomerResolverTest extends TestCase
         $resolver->resolve($user, $otherClient ? Uuid::randomHex() : $clientId, 'Google', $context, allowRegistration: false, trustEmail: $trustEmail);
     }
 
+    public static function deferredRegistrationSettings(): iterable
+    {
+        yield 'verified with double opt-in' => [true, true];
+        yield 'verified without double opt-in' => [false, true];
+        yield 'unverified with double opt-in' => [true, false];
+        yield 'unverified without double opt-in' => [false, false];
+    }
+
+    #[DataProvider('deferredRegistrationSettings')]
+    public function testRegistrationHooksAndCompletionAcrossDoubleOptInSettings(bool $doubleOptIn, bool $verified): void
+    {
+        $frameworkContext = Context::createDefaultContext();
+        $salesChannel = $this->createStub(SalesChannelEntity::class);
+        $salesChannel->method('getCountryId')->willReturn(Uuid::randomHex());
+        $context = $this->createStub(SalesChannelContext::class);
+        $context->method('getSalesChannelId')->willReturn(Uuid::randomHex());
+        $context->method('getSalesChannel')->willReturn($salesChannel);
+        $context->method('getContext')->willReturn($frameworkContext);
+        $context->method('addState')->willReturnCallback($frameworkContext->addState(...));
+        $context->method('removeState')->willReturnCallback($frameworkContext->removeState(...));
+        $customer = new CustomerEntity();
+        $customer->setId(Uuid::randomHex());
+        $customer->setDoubleOptInRegistration($doubleOptIn);
+        $result = $this->createStub(EntitySearchResult::class);
+        $result->method('getEntities')->willReturn(new CustomerCollection([$customer]));
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('search')->willReturn($result);
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addSubscriber(new OAuthRegistrationSubscriber($repository));
+        $dispatcher->addListener(OAuthCustomerRegistrationEvent::class, static function (OAuthCustomerRegistrationEvent $event): void {
+            $event->deferCompletion = true;
+            $event->data->get('billingAddress')->set('phoneNumber', '-');
+        });
+        $registrations = 0;
+        $dispatcher->addListener(CustomerRegisterEvent::class, static function () use (&$registrations): void { ++$registrations; });
+        $registerRoute = $this->createMock(AbstractRegisterRoute::class);
+        $registerRoute->expects(self::once())->method('register')->willReturnCallback(
+            static function (RequestDataBag $data) use ($dispatcher, $customer, $context, $frameworkContext, $doubleOptIn, $verified): CustomerResponse {
+                self::assertSame('-', $data->get('billingAddress')->get('phoneNumber'));
+                self::assertTrue($frameworkContext->hasState(CustomerResolver::STATE_DEFER_COMPLETION));
+                self::assertSame($verified, $frameworkContext->hasState(CustomerResolver::STATE_VERIFIED_EMAIL));
+                $mapping = new DataMappingEvent($data, [], $frameworkContext);
+                $dispatcher->dispatch($mapping, CustomerEvents::MAPPING_REGISTER_CUSTOMER);
+                $customer->setCustomFields($mapping->getOutput()['customFields']);
+                if ($doubleOptIn) {
+                    $event = new CustomerDoubleOptInRegistrationEvent($customer, $context, 'https://shop.example.com/confirm');
+                    $dispatcher->dispatch($event);
+                    self::assertSame($verified, $event->isPropagationStopped());
+                } else {
+                    $dispatcher->dispatch(new CustomerRegisterEvent($context, $customer));
+                }
+
+                return new CustomerResponse($customer);
+            },
+        );
+        $connection = $this->createStub(Connection::class);
+        $connection->method('fetchOne')->willReturn(false);
+        $connection->method('transactional')->willReturnCallback(static fn (\Closure $operation): mixed => $operation());
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->expects($doubleOptIn && !$verified ? self::never() : self::once())->method('loginById');
+        $user = new User();
+        $user->primaryKey = 'subject';
+        $user->primaryEmail = 'customer@example.com';
+        $user->emails = [$user->primaryEmail];
+        $user->verifiedEmails = $verified ? $user->emails : [];
+        $resolver = new CustomerResolver(
+            $connection,
+            $accountService,
+            $registerRoute,
+            new RequestStack(),
+            $dispatcher,
+            $repository,
+            new EnforcedEmailDomainService($this->createStub(Connection::class)),
+        );
+        try {
+            $resolver->resolve($user, Uuid::randomHex(), 'Google', $context);
+            self::assertFalse($doubleOptIn && !$verified);
+        } catch (OAuthEmailConfirmationRequiredException) {
+            self::assertTrue($doubleOptIn && !$verified);
+            // The later confirmation request must also defer registration events.
+            $customer->setDoubleOptInConfirmDate(new \DateTimeImmutable());
+            $dispatcher->dispatch(new CustomerRegisterEvent($context, $customer));
+        }
+        self::assertSame(0, $registrations);
+        self::assertFalse($frameworkContext->hasState(CustomerResolver::STATE_VERIFIED_EMAIL));
+        self::assertFalse($frameworkContext->hasState(CustomerResolver::STATE_DEFER_COMPLETION));
+        $completion = new RegistrationCompletionService($connection, $repository, $dispatcher);
+        self::assertTrue($completion->complete($customer->getId(), $context));
+        self::assertSame(1, $registrations);
+    }
+
     // -------------------------------------------------------------------------
     // enforced email domains
     // -------------------------------------------------------------------------
@@ -575,6 +681,7 @@ final class CustomerResolverTest extends TestCase
         $accountService->expects(self::once())->method('loginById')->with($this->customerId);
 
         $customerRepository = $this->createMock(EntityRepository::class);
+        $customerRepository->method('search')->willReturn($this->makeCustomerSearchResult());
         $customerRepository->expects(self::once())
             ->method('update')
             ->with(self::callback(fn (array $data) => $data[0]['id'] === $this->customerId && \is_string($data[0]['password'])));
@@ -606,6 +713,7 @@ final class CustomerResolverTest extends TestCase
         );
 
         $customerRepository = $this->createMock(EntityRepository::class);
+        $customerRepository->method('search')->willReturn($this->makeCustomerSearchResult());
         $customerRepository->expects(self::never())->method('update');
 
         $context = $this->createStub(SalesChannelContext::class);
@@ -660,6 +768,17 @@ final class CustomerResolverTest extends TestCase
         return new EnforcedEmailDomainService($connection);
     }
 
+    private function makeCustomerSearchResult(): EntitySearchResult
+    {
+        $customer = new CustomerEntity();
+        $customer->setId($this->customerId);
+        $customer->setDoubleOptInRegistration(false);
+        $result = $this->createStub(EntitySearchResult::class);
+        $result->method('getEntities')->willReturn(new CustomerCollection([$customer]));
+
+        return $result;
+    }
+
     private function makeResolver(
         ?Connection $connection = null,
         ?AccountService $accountService = null,
@@ -667,14 +786,9 @@ final class CustomerResolverTest extends TestCase
         ?EnforcedEmailDomainService $enforcedEmailDomains = null,
         ?EntityRepository $customerRepository = null,
     ): CustomerResolver {
-        $customer = new CustomerEntity();
-        $customer->setId($this->customerId);
-        $customer->setDoubleOptInRegistration(false);
-        $result = $this->createStub(\Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult::class);
-        $result->method('getEntities')->willReturn(new \Shopware\Core\Checkout\Customer\CustomerCollection([$customer]));
         $repository = $customerRepository ?? $this->createStub(EntityRepository::class);
         if ($customerRepository === null) {
-            $repository->method('search')->willReturn($result);
+            $repository->method('search')->willReturn($this->makeCustomerSearchResult());
         }
         return new CustomerResolver(
             $connection ?? $this->createStub(Connection::class),

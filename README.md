@@ -219,3 +219,11 @@ MIT
 `User::verifiedEmails` contains only addresses explicitly verified by the identity service. OIDC clients require the boolean `email_verified` claim; GitHub always checks its email endpoint, including when the public profile contains an email. Custom clients must populate this list themselves. Missing or false verification never counts as verified.
 
 Automatic email-based linking and email updates use verified addresses only. Existing key mappings remain scoped to the configured client. When Shopware requires double opt-in, a verified primary email confirms a newly registered customer without sending a confirmation email. Otherwise the normal confirmation email is sent and login is refused until the customer confirms it. Existing unconfirmed customers also cannot bypass double opt-in through a linked identity.
+
+### Completing additional registration details
+
+Subscribe to `OAuthCustomerRegistrationEvent` to modify its server-side `data` before validation (for example a required phone placeholder) and set `deferCompletion = true` when your shop needs additional details or consent. The plugin persists its internal `tinect_oauth_registration_pending` custom field before registration events run, and suppresses `CustomerRegisterEvent` until completion, including after a later email confirmation.
+
+After validating and saving the additional data, call `RegistrationCompletionService::complete($customerId, $salesChannelContext)`. It clears the flag and dispatches `CustomerRegisterEvent` with the completed customer, independently of double-opt-in configuration. Repeated completion calls do not redispatch the event. `OAuthCustomerRegisteredEvent` still reports initial account creation; use the core registration event for completed registrations.
+
+A shop enabling deferred completion must gate its own protected operations while `RegistrationCompletionService::isPending($customer)` is true. Page redirects alone do not enforce this: check business operations such as order creation for Store API and AJAX requests too. The plugin does not choose a profile form or its business-specific validation rules.

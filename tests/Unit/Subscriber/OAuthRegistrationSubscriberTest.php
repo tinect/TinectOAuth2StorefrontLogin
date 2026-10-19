@@ -45,4 +45,17 @@ final class OAuthRegistrationSubscriberTest extends TestCase
         self::assertSame($confirm, $event->isPropagationStopped());
         self::assertSame($confirm, $customer->getDoubleOptInConfirmDate() !== null);
     }
+    public function testPendingFlagIsMappedBeforeCustomerCreationWithoutDiscardingCustomFields(): void
+    {
+        $context = Context::createDefaultContext();
+        $context->addState(CustomerResolver::STATE, CustomerResolver::STATE_DEFER_COMPLETION);
+        $data = new \Shopware\Core\Framework\Validation\DataBag\RequestDataBag(['customFields' => ['business_field' => 'value']]);
+        $event = new \Shopware\Core\Framework\Event\DataMappingEvent($data, ['email' => 'customer@example.com'], $context);
+        $subscriber = new OAuthRegistrationSubscriber($this->createStub(EntityRepository::class));
+        $subscriber->markPendingRegistration($event);
+        self::assertTrue($event->getOutput()['customFields'][\Tinect\OAuth2StorefrontLogin\Service\RegistrationCompletionService::PENDING_CUSTOM_FIELD]);
+        self::assertSame('value', $event->getOutput()['customFields']['business_field']);
+        self::assertFalse($data->has('customFields'));
+    }
+
 }
