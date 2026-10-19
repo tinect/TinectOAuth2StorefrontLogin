@@ -1,0 +1,4 @@
+storefront:
+    router:
+        allowed_routes:
+            - tinect.oauth.callback

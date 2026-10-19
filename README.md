@@ -50,7 +50,7 @@ Create one entry per provider you want to offer:
 | **Authorization / Token / Userinfo Endpoint** | Fill only if you are not using a discovery document |
 | **Scopes** | Space-separated, defaults to `openid email profile` |
 
-The callback URL to register with your provider is `https://your-shop.example.com/account/oauth/{clientId}/callback`.
+The callback URL to register with your provider is `https://your-shop.example.com/account/oauth/{clientId}/callback`. For storefront domains with a path prefix, include that prefix (for example `/en/account/oauth/{clientId}/callback`). Register every callback URL used by your sales-channel domains.
 
 ## Login flow
 
