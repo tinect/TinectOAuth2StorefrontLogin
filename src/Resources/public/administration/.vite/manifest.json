@@ -1,0 +1,9 @@
+{
+  "main.js": {
+    "file": "js/tinect-o-auth2-storefront-login-VRTL4M3R.js",
+    "name": "tinect-o-auth2-storefront-login",
+    "src": "main.js",
+    "isEntry": true,
+    "css": []
+  }
+}
